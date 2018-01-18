@@ -211,8 +211,6 @@ def export(request):
             if status=='error':
                 return HttpResponse(status)
         return HttpResponse('success')
-        # return HttpResponseRedirect('/admin/infolist')
-        # return render(request,'infolist.html',{'infolist':infolist})
     return HttpResponse('fail')
 
 def edit_email(request):
