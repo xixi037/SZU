@@ -1,20 +1,20 @@
 <div id="result_div">
-<form id="status_form">
-    {% csrf_token %}
-请选择状态<br /><br />
-<label><input name="status" type="radio" value="0">不能提交</label>
-<label><input name="status" type="radio" value="1" />开放申请</label>
-<label><input name="status" type="radio" value="2" />开放中期 </label>
-<label><input name="status" type="radio" value="3" />开放结题</label>
-</form>
-<button class="btn btn-default btn-sm" id="ok">确定</button>
+    <form id="status_form">
+        {% csrf_token %}
+        请选择状态<br/><br/>
+        <label><input name="status" type="radio" value="0">不能提交</label>
+        <label><input name="status" type="radio" value="1"/>开放申请</label>
+        <label><input name="status" type="radio" value="2"/>开放中期 </label>
+        <label><input name="status" type="radio" value="3"/>开放结题</label>
+    </form>
+    <button class="btn btn-default btn-sm" id="ok">确定</button>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         console.log({{ status }});
         document.getElementsByName("status")[{{ status }}].checked = "checked";
-});
-$('#ok').click(function () {
+    });
+    $('#ok').click(function () {
         $.ajax({
             url: 'change_status',
             data: $('#status_form').serialize(),

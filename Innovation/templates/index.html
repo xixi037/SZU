@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>主页</title>
+    <title>我的主页</title>
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/jqpaginator.min.js"></script>
     <style>
         /* 下拉按钮样式 */
         .dropbtn {
@@ -15,6 +14,15 @@
             font-size: 16px;
             border: none;
             cursor: pointer;
+        }
+
+        .ddropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+        {#    cursor: pointer;#}
         }
 
         /* 容器 <div> - 需要定位下拉内容 */
@@ -60,16 +68,22 @@
 <div class="container">
     <nav>
         <div>
-            {% if username != '' %}
-                <button id="cancel" style="float:right" class="btn btn-default btn-sm">注销</button>
-            {% endif %}
-            <button class="dropbtn" id="manage">管理用户信息</button>
-            <button class="dropbtn" id="sub_record">查看提交记录</button>
-            <button class="dropbtn" id="change_status">改变状态</button>
-            <button class="dropbtn" id="send_email">发送邮件</button>
+            <button id="cancel" style="float:right" class="btn btn-default btn-sm">注销</button>
+            <div class="dropdown">
+                <button class="dropbtn">项目相关</button>
+                <div class="dropdown-content">
+                    <a href="/basic">申报项目</a>
+                    <a href="/myproject">我的项目</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">个人信息修改</button>
+                <div class="dropdown-content">
+                    <a href="/chgpwd">修改密码</a>
+                </div>
+            </div>
         </div>
     </nav>
-    <div id="results_div"></div>
 </div>
 <script>
     $('#cancel').click(function () {
@@ -86,59 +100,45 @@
             }
         });
     });
-    $('#sub_record').click(function () {
+    $('#apply_model').click(function () {
         $.ajax({
-            url: 'infolist',
-            data: '',
+            url: '/apply_model',
+            data: "",
+            type: "GET",
             success: function (data) {
-                $('#results_div').html(data);
+                window.location.href = '/downloadfile?url=' + data
             },
             error: function (data) {
                 console.log(data);
             }
-
         });
     });
-    $('#manage').click(function () {
+    $('#middle_model').click(function () {
         $.ajax({
-            url: 'userlist',
-            data: '',
+            url: '/middle_model',
+            data: "",
+            type: "GET",
             success: function (data) {
-                $('#results_div').html(data);
+                window.location.href = '/downloadfile?url=' + data
             },
             error: function (data) {
                 console.log(data);
             }
-
         });
     });
-    $('#change_status').click(function () {
+    $('#conclusion_model').click(function () {
         $.ajax({
-            url: 'status',
-            data: '',
+            url: '/conclusion_model',
+            data: "",
+            type: "GET",
             success: function (data) {
-                $('#results_div').html(data);
+                window.location.href = '/downloadfile?url=' + data
             },
             error: function (data) {
                 console.log(data);
             }
-
         });
     });
-    $('#send_email').click(function () {
-        $.ajax({
-            url: 'edit_email',
-            data: '',
-            success: function (data) {
-                $('#results_div').html(data);
-            },
-            error: function (data) {
-                console.log(data);
-            }
-
-        });
-    });
-
 </script>
 </body>
 </html>

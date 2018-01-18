@@ -47,7 +47,7 @@
                         <td><span>{{ i.classID }}</span></td>
                         <td id="editline"><a href="javascript:clickEdit({{ forloop.counter }})" class="edit"
                                              id="edit{{ forloop.counter }}">编辑</a></td>
-                        <td><a href="#" id="delete" name={{ i.username }}>删除</a></td>
+                        <td><a href="javascript:clickDelete({{ forloop.counter }})" id="delete{{ forloop.counter }}" name={{ i.username }}>删除</a></td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -79,22 +79,20 @@
             }
         });
     });
-
-
     $('#add').click(function () {
         $('.add').prop('type', 'text');
         $('#ok').show();
     });
-    $("#delete").click(function () {
-        var stuID = $(this).attr('name');
+    var clickDelete = function (index) {
+        var elem = '#delete' + index.toString();
+        var stuID = $(elem).attr('name');
         console.log('到这里了');
         console.log(stuID);
-        {#            console.log($(this).attr('name'));#}
         var con = confirm('确认删除么？');
         if (con == true) {
             $.ajax({
                 url: 'del_user',
-                data: 'stuID=' + stuID,
+                data: 'stuID=' + stuID+'&pageIndex='+{{ pageIndex }},
                 type: "GET",
                 success: function (data) {
                     $('#results_div').html(data);
@@ -104,7 +102,7 @@
                 }
             });
         }
-    });
+    };
 
     function doUpload() {
         var formData = new FormData($("#uploadForm")[0]);
@@ -155,27 +153,29 @@
             }
         }
     });
-    var clickEdit = function (huahua) {
-        var xixi = '#edit' + huahua.toString();
-        var e_length = $(xixi).parent().parent().find('span').length;
+    var clickEdit = function (index) {
+        var elem = '#edit' + index.toString();
+        var e_length = $(elem).parent().parent().find('span').length;
         var e_value;
         var attrlist = ['forloop', 'stuID', 'name', 'sex', 'major'];
         for (i = 1; i < e_length; i++) {
-            e_value = $(xixi).parent().parent().find('span')[i].innerHTML;
-            $(xixi).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name=' + attrlist[i] + ' value="' + e_value + '">';
+            e_value = $(elem).parent().parent().find('span')[i].innerHTML;
+            $(elem).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name=' + attrlist[i] + ' value="' + e_value + '">';
         }
-        $(xixi).parent().parent().find('#editline')[0].innerHTML = '<a href="javascript:saveEdit();" class="save">保存</a>';
+        $(elem).parent().parent().find('#editline')[0].innerHTML = '<a href="javascript:saveEdit();" class="save">保存</a>';
     };
+
     function saveEdit() {
-        console.log('确认保存');
+        console.log($('#userlist').serialize());
         var con = confirm('确认保存么？');
         if (con == true) {
             $.ajax({
                 url: 'save',
-                data: $('#userlist').serialize(),
+                data: $('#userlist').serialize()+'&pageIndex='+{{ pageIndex }},
 
                 type: "GET",
                 success: function (data) {
+                    console.log('到这里了');
                     $('#results_div').html(data);
                 },
                 error: function (data) {
@@ -184,51 +184,7 @@
             });
         }
     }
-    var onEditClick = function () {
-        {#        console.log(onEditClick.caller);#}
-        {#        var e_length = $(this).parent().parent().find('span').length;#}
-        {#        var e_value;#}
-        {#        var attrlist = ['forloop','stuID','name','sex','major'];#}
-        {#        console.log(this);#}
-        {#        for (i = 1; i < e_length; i++) {#}
-        {#            e_value = $(this).parent().parent().find('span')[i].innerHTML;#}
-        {#            $(this).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name='+attrlist[i]+' value="' + e_value + '">';#}
-        {#        }#}
-        {#                $(this).parent().parent().find('#editline')[0].innerHTML='<a href="#" class="save">保存</a>';#}
-    };
-    {#    $(document).on("click",".edit",onEditClick);#}
-    {#$('.edit').click(onEditClick);#}
-    {#    $(document).on("click",".edit",function () {#}
-    {#        console.log(caller)#}
-    {#        var e_length = $(this).parent().parent().find('span').length;#}
-    {#        var e_value;#}
-    {#        var attrlist = ['forloop','stuID','name','sex','major'];#}
-    {#        console.log(this);#}
-    {#        for (i = 1; i < e_length; i++) {#}
-    {#            e_value = $(this).parent().parent().find('span')[i].innerHTML;#}
-    {#            $(this).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name='+attrlist[i]+' value="' + e_value + '">';#}
-    {#        }#}
-    {#                $(this).parent().parent().find('#editline')[0].innerHTML='<a href="" class="save">保存</a>';#}
-    {#    });#}
-{#    $(document).on("click", ".save", function () {#}
-        {#    $('.save').click(function () {#}
-{#        console.log('确认保存');#}
-{#        var con = confirm('确认保存么？');#}
-{#        if (con == true) {#}
-{#            $.ajax({#}
-{#                url: 'save',#}
-{#                data: $('#userlist').serialize(),#}
-{##}
-{#                type: "GET",#}
-{#                success: function (data) {#}
-{#                    $('#results_div').html(data);#}
-{#                },#}
-{#                error: function (data) {#}
-{#                    console.log(data);#}
-{#                }#}
-{#            });#}
-{#        }#}
-{#    });#}
+
     $.jqPaginator('#pagination0', {
         totalPages: {{ page }},
         visiblePages: 5,

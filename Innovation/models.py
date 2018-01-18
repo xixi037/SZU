@@ -61,6 +61,13 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
+class Members(models.Model):
+    pro_id = models.IntegerField()
+    stu_id = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'members'
 
 
 

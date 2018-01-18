@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from Innovation.exportword import write_to_middle
-from Innovation.models import Users, Middle, Managers, ProInfo
+from Innovation.models import Users, Middle, Managers, ProInfo, Members
 
 
 def login(request):
@@ -62,9 +62,14 @@ def manage_info(request):
                 dict['export_time'] = i.export_time
                 infolist.append(dict)
     print(infolist)
+    count = len(infolist)
+    print('列表长度：'+str(count))
+    page = int(math.ceil(count / 20))
+    pageIndex = int(request.GET.get('pageIndex', 1))
+    print(pageIndex)
+    info = infolist[(pageIndex - 1) * 20:20 * pageIndex]
 
-
-    return render(request,'infolist.html',{'infolist':infolist})
+    return render(request,'infolist.html',{'infolist':info,'pageIndex':pageIndex,'count':count,'page':page})
 
 def manage_user(request):
     alluser = Users.objects.all()
@@ -79,7 +84,6 @@ def manage_user(request):
 def manage_status(request):
     user = Managers.objects.all()[0]
     status = user.status
-    print(status)
     return render(request,'status.html',{'status':status})
 
 def save_user(request):
@@ -89,6 +93,7 @@ def save_user(request):
         name = request.GET['name']
         sex = request.GET['sex']
         major = request.GET['major']
+        pageIndex = request.GET.get('pageIndex','1')
         record = Users.objects.filter(username=stuID)
 
         if not record:
@@ -97,26 +102,22 @@ def save_user(request):
         else:
             print('已存在')
             Users.objects.filter(username=stuID).update(name=name, sex=sex,major=major)
-        # namelist = Users.objects.all()
-    return HttpResponseRedirect('/admin/userlist')
-    #     return render(request, 'userlist.html', {'userlist': namelist})
-    # else:
-    #     namelist = Users.objects.all()
-    #     return render(request, 'userlist.html', {'userlist': namelist})
+    return HttpResponseRedirect('/admin/userlist?pageIndex='+str(pageIndex))
 
 def del_name(request):
     if request.method == 'GET':
         stuID = request.GET.get('stuID')
+        pageIndex = request.GET.get('pageIndex', '1')
         Users.objects.filter(username=stuID).delete()
         if ProInfo.objects.filter(leader_id=stuID):
-            Users.objects.filter(username=stuID).delete()
+            pro_objects = ProInfo.objects.filter(leader_id=stuID)
+            for i in pro_objects:
+                id = i.id
+            ProInfo.objects.filter(leader_id=stuID).delete()
+            Members.objects.filter(pro_id=id).delete()
             if Middle.objects.filter(leader_id=stuID):
                 Middle.objects.filter(leader_id=stuID).delete()
-
-        # Middle.objects.filter(username=stuID).delete()
-    # namelist = Users.objects.all()
-    return HttpResponseRedirect('/admin/userlist')
-    # return render(request, 'userlist.html', {'userlist': namelist})
+    return HttpResponseRedirect('/admin/userlist?pageIndex='+str(pageIndex))
 
 def add_name(request):
     if request.method == 'GET':
@@ -214,3 +215,6 @@ def export(request):
         # return HttpResponseRedirect('/admin/infolist')
         # return render(request,'infolist.html',{'infolist':infolist})
     return HttpResponse('fail')
+
+def edit_email(request):
+    return HttpResponse('还未完成 敬请期待...')

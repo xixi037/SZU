@@ -6,74 +6,98 @@
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     <style>
-        #basic_info{
-        position:absolute;
-        top:50%;
-        height:200px;
-        margin-top:-100px;
-    }
+        #basic_info {
+            position: absolute;
+            top: 50%;
+            height: 200px;
+            margin-top: -100px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-<b>以下内容需要全部填写</b>
-<form id="basic_info">
-<table>
-    <tbody>
-    <tr>
-        <td>项目名称</td>
-        <td><input type="text" name="pro_name" id="pro_name" value={{ pro_info.pro_name }}></td>
-        <td>导师姓名</td>
-        <td><input type="text" name="tutor_name" id="tutor_name" value={{ pro_info.tutor_id }}></td>
-        <td>负责人手机号</td>
-        <td><input type="text" name="leader_phone" id="leader_phone" value={{ user_info.phone }}></td>
-        <td>负责人邮箱</td>
-        <td><input type="text" name="leader_email" id="leader_email" value={{ user_info.email }}></td>
-    </tr>
-    <tr>
-        <td>负责人姓名</td>
-        <td><input type="text" name="pro_leader" readonly="true" value={{ user_info.name }}></td>
-        <td>负责人学号</td>
-        <td><input type="text" name="username" readonly="true" value={{ user_info.username }}></td>
-        <td>负责人性别</td>
-        <td><input type="text" name="sex" readonly="true" value={{ user_info.sex }}></td>
-        <td>负责人专业</td>
-        <td><input type="text" name="major" readonly="true" value={{ user_info.major }}></td>
-    </tr>
-    </tbody>
-</table>
-</form>
-<button type="button" id="sub">提交</button>
+    <b>以下内容需要全部填写</b>
+    <form id="basic_info">
+        <table>
+            <tbody>
+            <tr>
+                <td>负责人姓名</td>
+                <td><input type="text" name="pro_leader" readonly="true" value={{ user_info.name }}></td>
+                <td>负责人学号</td>
+                <td><input type="text" name="username" readonly="true" value={{ user_info.username }}></td>
+            </tr>
+            <tr>
+                <td>项目名称</td>
+                <td><input type="text" name="pro_name" id="pro_name" value={{ pro_info.pro_name }}></td>
+                <td>导师姓名</td>
+                <td><input type="text" name="tutor_name" id="tutor_name" value={{ pro_info.tutor_id }}></td>
+            </tr>
+
+
+            <tr>
+                <td>负责人手机号</td>
+                <td><input type="text" name="leader_phone" id="leader_phone" value={{ user_info.phone }}></td>
+                <td>负责人邮箱</td>
+                <td><input type="text" name="leader_email" id="leader_email" value={{ user_info.email }}></td>
+                {#                <td>负责人性别</td>#}
+                {#                <td><input type="text" name="sex" readonly="true" value={{ user_info.sex }}></td>#}
+                {#                <td>负责人专业</td>#}
+                {#                <td><input type="text" name="major" readonly="true" value={{ user_info.major }}></td>#}
+            </tr>
+            <tr>
+                <td colspan="3">成员学号(负责人除外，用“/”分割)</td>
+                <td><input type="text" name="members" id="members" value={{ memlist }}></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+    <button type="button" id="sub">提交</button>
+    <button type="button" id="close">关闭</button>
 </div>
 <script>
-    $('#sub').click(function(){
-        if(!$('#leader_email').val().match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)){
+    $('#sub').click(function () {
+        if (!$('#leader_email').val().match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
             alert('邮箱格式输入不正确！请重新输入')
-    }
-    else if(!$('#leader_phone').val().match(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/)){
+        }
+        else if (!$('#leader_phone').val().match(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/)) {
             alert('手机号码格式输入不正确！请重新输入')
         }
-    else{
-            $.ajax({
-            url:'/infostore',
-            data:$('#basic_info').serialize(),
-            type:'GET',
-            success:function(data){
-                if(data=='success') {
-                    window.location.href='/welcome';
+        else {
+            var flag = 1;
+            for (var i = 0; i < $('#basic_info input').length; i++) {
+                if ($.trim($('#basic_info input')[i].value) == "") {
+                    alert('需要全部填写，若没有则写"无"');
+                    console.log($('#basic_info input')[i].value);
+                    flag = 0;
+                    break;
                 }
-                else{
-                    alert('均不能为空!');
-                }
-            },
-            error:function(data){
-                console.log(data)
             }
-        })
+            if (flag) {
+                $.ajax({
+                    url: '/infostore',
+                    data: $('#basic_info').serialize(),
+                    type: 'GET',
+                    success: function (data) {
+                        if (data == 'success') {
+                            window.location.href = '/welcome';
+                        }
+                        else {
+                            alert('均不能为空!');
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                })
+            }
+
 
         }
 
-    })
+    });
+    $('#close').click(function () {
+        window.location.href = '/welcome'
+    });
 </script>
 </body>
 </html>

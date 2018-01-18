@@ -18,14 +18,12 @@
     </style>
 </head>
 <body>
-{#<div class="container">#}
 <div id="login_div">
 <form action="/check" method="post" id="login_form">
     {% csrf_token %}
     <h1 style="text-align: center">登录</h1>
     <hr>
     <div class="input-group">
-{#        <td>用户名：</td>#}
         <span class="input-group-addon" id="basic-addon1">
             <span class="glyphicon glyphicon-user"></span>
             </span>
@@ -33,13 +31,11 @@
     </div>
     <br>
     <div class="input-group">
-{#        <td>密码：</td>#}
         <span class="input-group-addon" id="basic-addon1">
             <span class="glyphicon glyphicon-lock"></span>
         </span>
         <input type="password" name="password" class="form-control" placeholder="密码">
     </div>
-{#        <input type="hidden" name="fromer" value="{{ fromer }}">#}
     <br>
     <input type="submit" style="width:290px;" class="btn btn-default" value="提交">
     <br>
@@ -49,6 +45,5 @@
 </form>
 
 </div>
-{#</div>#}
 </body>
 </html>

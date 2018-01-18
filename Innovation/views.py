@@ -18,7 +18,7 @@ from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpRespons
 from django.shortcuts import render
 
 
-from Innovation.models import Users, Middle, ProInfo, Managers
+from Innovation.models import Users, Middle, ProInfo, Managers, Members
 
 
 def todict(source):
@@ -57,6 +57,12 @@ def middle(request):
         for i in pro_info:
             info['pro_name']=i.pro_name
             info['tutor_id']=i.tutor_id
+            id = i.id
+        mem_info = Members.objects.filter(pro_id=id)
+        memlist = []
+        for i in mem_info:
+            memlist.append(i.stu_id)
+        info["pro_mems"] = '/'.join(memlist)
         user_info = Users.objects.filter(username=username)
         for i in user_info:
             info['pro_leader']=i.name
@@ -186,9 +192,11 @@ def check(request):
         if user:
             print('存在')
             flag = 1
-            response = HttpResponseRedirect('/basic')
-            # request.session['username']=username
-            # request.session.set_expiry(600)
+
+            if ProInfo.objects.filter(leader_id=username):
+                response = HttpResponseRedirect('/basic')
+            else:
+                response = HttpResponseRedirect('/index')
             response.set_cookie('username', username, 3600)
             response.set_cookie('flag', flag, 3600)
             return response
@@ -205,7 +213,12 @@ def basic(request):
         if request.GET.get('from','') == 'welcome':
             user_info = Users.objects.get(username=username)
             pro_info = ProInfo.objects.get(leader_id=username)
-            return render(request, 'basic.html', {'user_info': user_info, 'pro_info': pro_info})
+            mem_info = Members.objects.filter(pro_id=pro_info.id)
+            memlist = []
+            for i in mem_info:
+                memlist.append(i.stu_id)
+            memlist = '/'.join(memlist)
+            return render(request, 'basic.html', {'user_info': user_info, 'pro_info': pro_info,'memlist':memlist})
         elif ProInfo.objects.filter(leader_id=username):
             return HttpResponseRedirect('/welcome')
         else:
@@ -214,34 +227,42 @@ def basic(request):
     return HttpResponseRedirect('/login')
 
 def infostore(request):
-    if request.GET.get('pro_name') and request.GET.get('leader_phone') and request.GET.get('leader_email') and request.GET.get('tutor_name'):
-        username = request.GET.get('username')
-        phone = request.GET.get('leader_phone')
-        email = request.GET.get('leader_email')
-        pro_name = request.GET.get('pro_name')
-        tutor_name = request.GET.get('tutor_name')
-        Users.objects.filter(username=username).update(phone=phone,email=email)
-        if ProInfo.objects.filter(leader_id=username):
-            ProInfo.objects.filter(leader_id=username).update(pro_name=pro_name,tutor_id=tutor_name)
-        else:
-            ProInfo.objects.create(leader_id=username,pro_name=pro_name,tutor_id=tutor_name)
-        pro_object = ProInfo.objects.filter(leader_id=username)
-        for i in pro_object:
-            pro_id = i.id
-            print('pro_id是个啥：'+str(pro_id))
-        if not Middle.objects.filter(leader_id=username):
-            print('建立中期报告数据库')
-            print(pro_id)
-            Middle.objects.create(pro_id=pro_id,leader_id=username)
-        return HttpResponse('success')
-    return HttpResponse('error')
+    username = request.GET.get('username')
+    phone = request.GET.get('leader_phone')
+    email = request.GET.get('leader_email')
+    pro_name = request.GET.get('pro_name')
+    tutor_name = request.GET.get('tutor_name')
+    members = request.GET.get('members').strip()
+    memlist = members.split("/")
+    print(memlist)
+    Users.objects.filter(username=username).update(phone=phone,email=email)
+    if ProInfo.objects.filter(leader_id=username):
+        ProInfo.objects.filter(leader_id=username).update(pro_name=pro_name,tutor_id=tutor_name)
+    else:
+        ProInfo.objects.create(leader_id=username,pro_name=pro_name,tutor_id=tutor_name)
+    pro_object = ProInfo.objects.filter(leader_id=username)
+    for i in pro_object:
+        pro_id = i.id
+        print('pro_id是：'+str(pro_id))
+    if Members.objects.filter(pro_id=pro_id):
+        Members.objects.filter(pro_id=pro_id).delete()
+    for i in memlist:
+        Members.objects.create(pro_id=pro_id,stu_id=i)
+    if not Middle.objects.filter(leader_id=username):
+        print('建立中期报告数据库')
+        print(pro_id)
+        Middle.objects.create(pro_id=pro_id,leader_id=username)
+    return HttpResponse('success')
 
 def welcome(request):
     # if request.COOKIES.get('username', '') != '' and request.COOKIES.get('flag') == '1':
     username = request.COOKIES.get('username')
-    user = Managers.objects.all()[0]
-    status = user.status
-    return render(request,'welcome.html',{'username':username,'status':status})
+    if ProInfo.objects.filter(leader_id=username):
+        user = Managers.objects.all()[0]
+        status = user.status
+        return render(request,'welcome.html',{'username':username,'status':status})
+    else:
+        return HttpResponseRedirect('/index')
     # return HttpResponseRedirect('/login')
 
 
@@ -282,13 +303,6 @@ def getfile(request):
     return HttpResponseRedirect('/upload')
 
 
-
-
-
-
-
-
-
 def change_password(request):
     return render(request, 'change_password.html')
 
@@ -322,14 +336,14 @@ def send_email(request):
 
     subject = '来自西西的问候'
 
-    text_content = '黄树华是傻子.'
+    text_content = '!!!.'
 
     html_content = '<p>这是一封<strong>重要的</strong>邮件.</p>'
 
-    msg = EmailMultiAlternatives(subject, text_content, '492195925@qq.com', ['553105821@qq.com'])
+    msg = EmailMultiAlternatives(subject, text_content, '492195925@qq.com', ['492195925@qq.com'])
     # 553105821
     # msg.attach_alternative(html_content, "text/html")
-    file = 'C:\\Users\\HP\\Desktop\\SZU\\middle\\'+'中期报告_邓云_黄树华_基于深度学习的肌电图、脑电图分析2.doc'
+    file = 'C:\\Users\\HP\\Desktop\\SZU\\middle\\'+'中期报告_黄淦_黄树华_基于深度学习的肌电图、脑电图分析2.doc'
     text = open(file,'rb').read()
     file_name = os.path.basename(file)
     b = make_header([(file_name,'utf-8')]).encode('utf-8')
@@ -355,3 +369,22 @@ def send_email(request):
 #         # In reality we'd use a form class
 #         # to get proper validation errors.
 #         return HttpResponse('Make sure all fields are entered and valid.')
+
+def index(request):
+    return render(request,'index.html')
+
+def mypro(request):
+    username = request.COOKIES.get('username')
+    leader = Users.objects.get(username=username)
+    if ProInfo.objects.filter(leader_id=username):
+        pro = ProInfo.objects.filter(leader_id=username)
+        for i in pro:
+            info = model_to_dict(i)
+            mem_info = Members.objects.filter(pro_id=i.id)
+            memlist = []
+            for i in mem_info:
+                memlist.append(i.stu_id)
+            memlist = '/'.join(memlist)
+            info["pro_mems"] = memlist
+            info["name"] = leader.name
+    return render(request,'mypro.html',{'infolist':info})
