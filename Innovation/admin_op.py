@@ -134,8 +134,7 @@ def add_name(request):
         else:
             print('已存在')
             Users.objects.filter(username=stuID).update(name=name, sex=sex, major=major, classID=classID)
-    # namelist = Users.objects.all()
-    # return render(request, 'userlist.html', {'userlist': namelist})
+
     return HttpResponseRedirect('/admin/userlist')
 
 def userlist_model(request):
