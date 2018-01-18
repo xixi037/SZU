@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/FileSaver.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.wordexport.js"></script>
+    <style>
+        .container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto;}
+           pre {
+                white-space: pre-wrap;       /* css-3 */
+                white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                word-wrap: break-word;       /* Internet Explorer 5.5+ */
+                word-break:break-all;
+                overflow:hidden;
+                }
+    </style>
+</head>
+<body>
+<div class="container">
+<form id="info">
+{#    {% csrf_token %}#}
+    | 基本信息：
+    <table id="t1">
+        <tbody>
+        <tr>
+            <td>项目名称</td>
+            <td><input type="text" name="pro_name" id="pro_name" readonly="true" value={{ pro_name }}></td>
+            <td>选题方式</td>
+            <td>
+                <select name="pro_way">
+                    <option value="A">从开放实验项目库中选取</option>
+                    <option value="B">项目组成员自主命题</option>
+                    <option value="C">其它</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>负责人手机号码</td>
+            <td><input type="text" name="leader_phone" readonly="true" value={{ leader_phone }}></td>
+            <td>负责人电子邮箱</td>
+            <td><input type="email" name="leader_email" readonly="true" value={{ leader_email }}></td>
+        </tr>
+        </tbody>
+    </table>
+    | 导师信息：
+    <table id="t2">
+        <tbody>
+        <tr>
+            <td>导师姓名</td>
+            <td><input type="text" name="tutor_name" id="tutor_name" readonly="true" value={{ tutor_name }}></td>
+            <td>导师研究专长</td>
+            <td><input type="text" name="tutor_area"></td>
+        </tr>
+        <tr>
+            <td>导师联系电话</td>
+            <td><input type="text" name="tutor_phone"></td>
+            <td>导师电子邮箱</td>
+            <td><input type="email" name="tutor_email"></td>
+        </tr>
+        </tbody>
+    </table>
+{#    | 项目参与人信息：（请将主要负责人写在第一个）#}
+{#    <button type="button" id="add">添加</button>#}
+    <table id="t3">
+        | 项目参与人信息：（请将主要负责人写在第一个）
+        <button type="button" id="addmem">添加</button>
+        <tbody>
+        <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>学号</th>
+            <th>年级</th>
+            <th>研究专长</th>
+            <th>承担工作</th>
+            <th>所在学院</th>
+        </tr>
+        <tr>
+            <td><input type="text" name="pro_leader" id="pro_leader" readonly="true" value={{ pro_leader }}></td>
+            <td><input type="text" name="leader_sex" readonly="true" value={{ sex }}></td>
+            <td><input type="text" name="leader_stuID" readonly="true" value={{ username }}></td>
+            <td><input type="text" name="leader_grade"></td>
+            <td><input type="text" name="leader_area"></td>
+            <td><input type="text" name="leader_work"></td>
+            <td><input type="text" name="leader_academy" readonly="true" value={{ major }}></td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="d1">
+        | 项目具体信息：<br>
+        一、项目申请理由（包括：项目研究背景、现状、研究目的及意义等，不超过800字）<br>
+        <textarea rows="10" cols="150" name="pro_reason" wrap="hard" id="text1">
+        </textarea><br>
+        二、项目研究内容（包括：项目研究内容、基本思路和方法，不超过1000字）<br>
+        <textarea rows="10" cols="150" name="pro_content" wrap="hard" id="text2">
+        </textarea><br>
+        三、项目创新之处（不超过500字）<br>
+        <textarea rows="8" cols="150" name="pro_innovation" wrap="hard" id="text3">
+        </textarea><br>
+        四、项目拟利用资源（包括：实验室、设备、材料、场地等，不超过300字））<br>
+        <textarea rows="4" cols="150" name="pro_source" wrap="hard" id="text4">
+        </textarea><br>
+        <table id="t4">
+            五、项目进度安排
+            <button type="button" id="addprocessing">添加</button>
+            <tbody>
+            <tr>
+                <th>时间</th>
+                <th>研究内容</th>
+                <th>主要负责人</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="pro_time0"></td>
+                <td><input type="text" name="pro_content0"></td>
+                <td><input type="text" name="pro_leader0"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="t5">
+            六、预期研究成果<br>
+            <tbody>
+            <tr>
+                <th>最终成果名称</th>
+                <th>完成时间</th>
+                <th>成果形式</th>
+                <th>参加人</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="pro_achievement"></td>
+                <td><input type="text" name="pro_endtime"></td>
+                <td><input type="text" name="pro_form"></td>
+                <td><input type="text" name="pro_participant"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="t6">
+            七、经费预算（以人民币元为单位）<br>
+            <tbody>
+            <tr>
+                <th>预算支出科目</th>
+                <th>支出金额（元）</th>
+                <th>预算依据及理由</th>
+            </tr>
+            <tr>
+                <td>设备费</td>
+                <td><input type="text" name="budget_equip_money"></td>
+                <td><input type="text" name="budget_equip_reason"></td>
+            </tr>
+            <tr>
+                <td>材料费</td>
+                <td><input type="text" name="budget_material_money"></td>
+                <td><input type="text" name="budget_material_reason"></td>
+            </tr>
+            <tr>
+                <td>小型会议费</td>
+                <td><input type="text" name="budget_meeting_money"></td>
+                <td><input type="text" name="budget_meeting_reason"></td>
+            </tr>
+            <tr>
+                <td>印刷、版面、专利申请费</td>
+                <td><input type="text" name="budget_apply_money"></td>
+                <td><input type="text" name="budget_apply_reason"></td>
+            </tr>
+            <tr>
+                <td>图书、资料费</td>
+                <td><input type="text" name="budget_books_money"></td>
+                <td><input type="text" name="budget_books_reason"></td>
+            </tr>
+            <tr>
+                <td>交通、差旅费</td>
+                <td><input type="text" name="budget_trans_money"></td>
+                <td><input type="text" name="budget_trans_reason"></td>
+            </tr>
+            <tr>
+                <td>劳务、咨询费</td>
+                <td><input type="text" name="budget_service_money"></td>
+                <td><input type="text" name="budget_service_reason"></td>
+            </tr>
+            <tr>
+                <td>其他经费</td>
+                <td><input type="text" name="budget_other_money"></td>
+                <td><input type="text" name="budget_other_reason"></td>
+            </tr>
+            <tr>
+                <td>合计</td>
+                <td colspan="2"><input type="text" name="budget_total_money"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+</form>
+<button type="button" id="sub">提交</button>
+{#<button type="button" id="exportword">导出word</button>#}
+<section id="model_section" class="container"></section>
+    </div>
+<script>
+    $(document).ready(function(){
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+        var nameCount = 1;
+        var processingCount = 1;
+        var s;
+        $('#addmem').click(function(){
+            if(nameCount<4){
+                s = nameCount.toString();
+                $('#t3 tr').eq(-1).after('<tr>' +
+                    '            <td><input type="text" name="name_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="sex_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="stuID_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="grade_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="area_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="work_mem'+s+'"></td>\n' +
+                    '            <td><input type="text" name="academy_mem'+s+'"></td>' +
+                    '        </tr>');
+                nameCount++;
+            }
+        });
+        $('#addprocessing').click(function(){
+            if(processingCount<7){
+                s = processingCount.toString();
+                $('#t4 tr').eq(-1).after('<tr>' +
+                    '            <td><input type="text" name="pro_time'+s+'"></td>\n' +
+                    '            <td><input type="text" name="pro_content'+s+'"></td>\n' +
+                    '            <td><input type="text" name="pro_leader'+s+'"></td>\n' +
+                    '        </tr>');
+                processingCount++;
+            }
+        });
+        $('#sub').click(function() {
+            var data = $('#info').serializeArray();
+            console.log(data);
+            $.ajax({
+{#                url:'/wordmodel',#}
+                url:'/apply_operation',
+                data:{
+                    'info':JSON.stringify(data)
+                },
+                type:'POST',
+                success:function(data) {
+                      console.log(data);
+                      window.location.href='/success?url='+data;
+{#                    $('#model_section').html(data);#}
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            })
+        });
+{#        $('#exportword').click(function(){#}
+{#            var tutor_name = $('#tutor_name').val();#}
+{#            var pro_leader = $('#pro_leader').val();#}
+{#            var pro_name = $('#pro_name').val();#}
+{#            $('#model_section').wordExport('申请书_'+tutor_name+'_'+pro_leader+'_'+pro_name);#}
+{#        })#}
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+from __future__ import unicode_literals
+#coding=utf-8
+import time
+import os
+from django.forms import model_to_dict
+from email.header import make_header
+
+import pythoncom
+import win32com.client
+from django.core.mail import send_mail
+
+
+
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+
+from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
+from django.shortcuts import render
+
+
+from Innovation.models import Users, Middle, ProInfo, Managers
+
+
+def todict(source):
+    target = {}
+    for item in source:
+        target.__setitem__(item.get('name'), item.get('value'))
+    return target
+
+def apply(request):
+    if request.COOKIES.get('username','') != '':
+        username = request.COOKIES.get('username')
+        user = Users.objects.filter(username=username)
+        for i in user:
+            pro_name = i.pro_name
+            tutor_name = i.tutor_name
+            name = i.name
+            sex = i.sex
+            major = i.major
+            phone = i.phone
+            email = i.email
+        return render(request,'test5.html',{'username':username,'pro_name':pro_name,'tutor_name':tutor_name,
+                                            'pro_leader':name,'sex':sex,'major':major,'leader_phone':phone,'leader_email':email})
+    return HttpResponseRedirect('/login')
+
+
+def middle(request):
+    if request.COOKIES.get('username','') != '':
+        username = request.COOKIES.get('username')
+        print(username)
+        pro_middle = Middle.objects.filter(leader_id=username)
+        for i in pro_middle:
+            info=model_to_dict(i)
+            pro_id = i.pro_id
+        print('项目id'+str(pro_id))
+        pro_info = ProInfo.objects.filter(id=pro_id)
+        for i in pro_info:
+            info['pro_name']=i.pro_name
+            info['tutor_id']=i.tutor_id
+        user_info = Users.objects.filter(username=username)
+        for i in user_info:
+            info['pro_leader']=i.name
+            info['leader_phone']=i.phone
+        print(info)
+        for i in pro_middle:
+            print(i.status)
+            if i.status == '1':
+                return render(request, 'submitted_middle.html',{'info':info})
+        return render(request, 'middle.html',
+                      {'info':info})
+    return HttpResponseRedirect('/login')
+
+
+def save_middle(request):
+    if request.POST.get('info','') != '':
+        info = eval(request.POST.get('info'))
+        info = todict(info)
+        pro_num = info.get('pro_num', '')
+        leader_stuID = info.get('leader_stuID', '')
+        # leader_phone = info.get('leader_phone', '')
+        pro_mems = info.get('pro_mems', '')
+        # tutor_name = info.get('tutor_name', '')
+        pro_stime = info.get('pro_stime', '')
+        pro_etime = info.get('pro_etime', '')
+        pro_endtime = info.get('pro_endtime', '')
+        pro_schedule = info.get('pro_schedule', '')
+        pro_source = info.get('pro_source', '')
+        pro_money = info.get('pro_money', '')
+        pro_difficulties = info.get('pro_difficulties', '')
+        pro_advice = info.get('pro_advice', '')
+        pro_change = info.get('pro_change', '')
+        pro_plan = info.get('pro_plan', '')
+        pro_harvest = info.get('pro_harvest', '')
+        status = info.get('status')
+
+        print(leader_stuID)
+        if Middle.objects.filter(leader_id=leader_stuID):
+            Middle.objects.filter(leader_id=leader_stuID).update(pro_num=pro_num,pro_mems=pro_mems,pro_stime=pro_stime,pro_etime=pro_etime,pro_endtime=pro_endtime,
+                                                                pro_schedule=pro_schedule,pro_source=pro_source,pro_money=pro_money,pro_difficulties=pro_difficulties,
+                                                                pro_advice=pro_advice,pro_change=pro_change,pro_plan=pro_plan,pro_harvest=pro_harvest,status=status)
+        else:
+            if ProInfo.objects.filter(leader_id=leader_stuID):
+                pro_object = ProInfo.objects.filter(leader_id=leader_stuID)
+                for i in pro_object:
+                    pro_id = i.id
+                Middle.objects.create(pro_id=pro_id,leader_id=leader_stuID,pro_num=pro_num,pro_mems=pro_mems,pro_stime=pro_stime,pro_etime=pro_etime, pro_endtime=pro_endtime,
+                                                                pro_schedule=pro_schedule, pro_source=pro_source,pro_money=pro_money, pro_difficulties=pro_difficulties,
+                                                                pro_advice=pro_advice, pro_change=pro_change,pro_plan=pro_plan, pro_harvest=pro_harvest,status=status)
+            else:
+                return HttpResponseRedirect('404.html')
+
+        print('填写完毕')
+    return HttpResponseRedirect('/middle')
+
+def success(request):
+    response = render(request, 'achieve.html')
+    if request.GET.get('url', '') != '':
+        url = request.GET.get('url')
+        response = render(request, 'achieve.html',{'url':url})
+    return response
+
+def apply_model(request):
+    if request.COOKIES.get('username','') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '申请报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+def middle_model(request):
+    if request.COOKIES.get('username','') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '中期报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+def conclusion_model(request):
+    if request.COOKIES.get('username','') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '结题报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+def downloadFile(request):
+    if request.GET.get('url','') != '':
+        print('有参数啦')
+        filename = request.GET["url"]
+        file_name = filename.split(os.sep)[-1]
+        print(filename)
+        def file_iterator(file_name, chunk_size=512):
+            with open(file_name,'rb') as f:
+                while True:
+                    c = f.read(chunk_size)
+                    if c:
+                        yield c
+                    else:
+                        break
+        response = StreamingHttpResponse(file_iterator(filename))
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename='+file_name.encode('utf-8').decode('ISO-8859-1')
+        return response
+    return HttpResponseRedirect('/success')
+
+def check(request):
+    print('检查了')
+    if request.method == 'POST':
+        username = request.POST['username']
+        print(username)
+        password = request.POST['password']
+        print(password)
+        user = Users.objects.filter(username__exact=username,password__exact=password)
+        if user:
+            print('存在')
+            flag = 1
+            response = HttpResponseRedirect('/basic')
+            # request.session['username']=username
+            # request.session.set_expiry(600)
+            response.set_cookie('username', username, 3600)
+            response.set_cookie('flag', flag, 3600)
+            return response
+        else:
+            return HttpResponseRedirect('/login')
+
+
+def login(request):
+    return render(request,'login.html')
+
+def basic(request):
+    if request.COOKIES.get('username','') != '' and request.COOKIES.get('flag','') == '1':
+        username = request.COOKIES.get('username')
+        if request.GET.get('from','') == 'welcome':
+            user_info = Users.objects.get(username=username)
+            pro_info = ProInfo.objects.get(leader_id=username)
+            return render(request, 'basic.html', {'user_info': user_info, 'pro_info': pro_info})
+        elif ProInfo.objects.filter(leader_id=username):
+            return HttpResponseRedirect('/welcome')
+        else:
+            user_info = Users.objects.get(username=username)
+            return render(request, 'basic.html', {'user_info': user_info})
+    return HttpResponseRedirect('/login')
+
+def infostore(request):
+    if request.GET.get('pro_name') and request.GET.get('leader_phone') and request.GET.get('leader_email') and request.GET.get('tutor_name'):
+        username = request.GET.get('username')
+        phone = request.GET.get('leader_phone')
+        email = request.GET.get('leader_email')
+        pro_name = request.GET.get('pro_name')
+        tutor_name = request.GET.get('tutor_name')
+        Users.objects.filter(username=username).update(phone=phone,email=email)
+        if ProInfo.objects.filter(leader_id=username):
+            ProInfo.objects.filter(leader_id=username).update(pro_name=pro_name,tutor_id=tutor_name)
+        else:
+            ProInfo.objects.create(leader_id=username,pro_name=pro_name,tutor_id=tutor_name)
+        pro_object = ProInfo.objects.filter(leader_id=username)
+        for i in pro_object:
+            pro_id = i.id
+            print('pro_id是个啥：'+str(pro_id))
+        if not Middle.objects.filter(leader_id=username):
+            print('建立中期报告数据库')
+            print(pro_id)
+            Middle.objects.create(pro_id=pro_id,leader_id=username)
+        return HttpResponse('success')
+    return HttpResponse('error')
+
+def welcome(request):
+    # if request.COOKIES.get('username', '') != '' and request.COOKIES.get('flag') == '1':
+    username = request.COOKIES.get('username')
+    user = Managers.objects.all()[0]
+    status = user.status
+    return render(request,'welcome.html',{'username':username,'status':status})
+    # return HttpResponseRedirect('/login')
+
+
+
+def cancel(request):
+    response = HttpResponse('cancel')
+    response.set_cookie('username','')
+    response.set_cookie('flag','')
+    return response
+
+def upload_apply(request):
+    return render(request,'upload_apply.html')
+
+def getfile(request):
+    if request.FILES.get('file','') != '':
+        file_obj = request.FILES.get('file')
+        if request.COOKIES.get('username', '') != '':
+            username = request.COOKIES.get('username')
+            user_info = Users.objects.filter(username=username)
+            print(username)
+            if user_info:
+                for i in user_info:
+                    if i.pro_name:
+                        name = i.name
+                        tutor_name = i.tutor_name
+                        pro_name = i.pro_name
+                    else:
+                        return HttpResponseRedirect('/welcome')
+                    path = os.getcwd() + os.sep + 'applications'
+                    savename = '申请书_' + tutor_name + '_' + name + '_' + pro_name + '.doc'
+                    filepath = os.path.join(path, savename)
+                    print(filepath)
+                    dest = open(filepath,'wb+')
+                    dest.write(file_obj.read())
+                    dest.close()
+            return render(request, 'welcome.html', {'username': username})
+        return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/upload')
+
+
+
+
+
+
+
+
+
+def change_password(request):
+    return render(request, 'change_password.html')
+
+def check_password(request):
+    # print('jinlaile')
+    if request.POST.get('former') != None:
+        username = request.COOKIES.get('username')
+        former = request.POST.get('former')
+        record = Users.objects.filter(username=username,password=former)
+        if record:
+            return HttpResponse('认证成功')
+        else:
+            return HttpResponse('密码错误')
+    return HttpResponseRedirect('404')
+
+def change_password_op(request):
+    if request.POST.get('latest') != None:
+        username = request.COOKIES.get('username')
+        latest = request.POST.get('latest')
+        Users.objects.filter(username=username).update(password=latest)
+        return HttpResponse('success')
+    return HttpResponseRedirect('404')
+
+def test(request):
+    return render(request,'test.html')
+
+def send_email(request):
+    # send_mail('Subject here', 'Here is the message.', '492195925@qq.com',
+    #           ['553105821@qq.com'], fail_silently=False)
+
+
+    subject = '来自西西的问候'
+
+    text_content = '黄树华是傻子.'
+
+    html_content = '<p>这是一封<strong>重要的</strong>邮件.</p>'
+
+    msg = EmailMultiAlternatives(subject, text_content, '492195925@qq.com', ['553105821@qq.com'])
+    # 553105821
+    # msg.attach_alternative(html_content, "text/html")
+    file = 'C:\\Users\\HP\\Desktop\\SZU\\middle\\'+'中期报告_邓云_黄树华_基于深度学习的肌电图、脑电图分析2.doc'
+    text = open(file,'rb').read()
+    file_name = os.path.basename(file)
+    b = make_header([(file_name,'utf-8')]).encode('utf-8')
+    msg.attach(b,text)
+
+    # msg.attach_file(file)
+
+
+    msg.send()
+    return HttpResponse('成功发送！')
+
+# def send_email(request):
+#     subject = request.POST.get('subject', '')
+#     message = request.POST.get('message', '')
+#     from_email = request.POST.get('from_email', '')
+#     if subject and message and from_email:
+#         try:
+#             send_mail(subject, message, from_email, ['admin@example.com'])
+#         except BadHeaderError:
+#             return HttpResponse('Invalid header found.')
+#         return HttpResponseRedirect('/contact/thanks/')
+#     else:
+#         # In reality we'd use a form class
+#         # to get proper validation errors.
+#         return HttpResponse('Make sure all fields are entered and valid.')
