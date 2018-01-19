@@ -9,14 +9,14 @@
 <button id="send_email">发送邮件</button>
 <div id="result"></div>
 <script>
-    $('#send_email').click(function(){
+    $('#send_email').click(function () {
         $.ajax({
-            url:'send_email',
-            data:'',
-            success:function(data){
+            url: 'send_email',
+            data: '',
+            success: function (data) {
                 $('#result').html(data);
             },
-            error:function(data){
+            error: function (data) {
                 console.log(data);
             }
         })

@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>登录界面</title>
-{#    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">#}
+    {#    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">#}
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
-    #login_form{
-        position:absolute;
-        top:50%;
-        left:50%;
-        width:290px;
-        height:200px;
-        margin-left:-145px;
-        margin-top:-150px;
-    }
+        #login_form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 290px;
+            height: 200px;
+            margin-left: -145px;
+            margin-top: -150px;
+        }
     </style>
 </head>
 <body>
 <div id="login_div">
-<form action="/check" method="post" id="login_form">
-    {% csrf_token %}
-    <h1 style="text-align: center">登录</h1>
-    <hr>
-    <div class="input-group">
+    <form action="/check" method="post" id="login_form">
+        {% csrf_token %}
+        <h1 style="text-align: center">登录</h1>
+        <hr>
+        <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">
             <span class="glyphicon glyphicon-user"></span>
             </span>
-        <input type="text" name="username" id="name" class="form-control" placeholder="用户名（学号）">
-    </div>
-    <br>
-    <div class="input-group">
+            <input type="text" name="username" id="name" class="form-control" placeholder="用户名（学号）">
+        </div>
+        <br>
+        <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">
             <span class="glyphicon glyphicon-lock"></span>
         </span>
-        <input type="password" name="password" class="form-control" placeholder="密码">
-    </div>
-    <br>
-    <input type="submit" style="width:290px;" class="btn btn-default" value="提交">
-    <br>
-    <hr>
-    <b>提示:</b>
-    <p>初始密码默认为学号后六位</p>
-</form>
+            <input type="password" name="password" class="form-control" placeholder="密码">
+        </div>
+        <br>
+        <input type="submit" style="width:290px;" class="btn btn-default" value="提交">
+        <br>
+        <hr>
+        <b>提示:</b>
+        <p>初始密码默认为学号后六位</p>
+    </form>
 
 </div>
 </body>

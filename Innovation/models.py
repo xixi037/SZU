@@ -4,7 +4,6 @@ from django.db import models
 class Managers(models.Model):
     username = models.CharField(primary_key=True, max_length=255)
     password = models.CharField(max_length=255, blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -69,6 +68,13 @@ class Members(models.Model):
         managed = False
         db_table = 'members'
 
+class Status(models.Model):
+    mode = models.IntegerField()
+    date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'status'
 
 
 

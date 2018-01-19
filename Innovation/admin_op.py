@@ -7,8 +7,10 @@ import openpyxl
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
+import time
+
 from Innovation.exportword import write_to_middle
-from Innovation.models import Users, Middle, Managers, ProInfo, Members
+from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status
 
 
 def login(request):
@@ -40,8 +42,8 @@ def admin_welcome(request):
     return HttpResponseRedirect('/admin/login')
 
 def manage_info(request):
-    user = Managers.objects.all()[0]
-    status = user.status
+    status = Status.objects.all()[0]
+    status = status.mode
     infolist = []
     if status == 1:
         pass
@@ -82,9 +84,15 @@ def manage_user(request):
     return render(request,'userlist.html',{'userlist':userlist,'pageIndex':pageIndex,'count':count,'page':page})
 
 def manage_status(request):
-    user = Managers.objects.all()[0]
-    status = user.status
+    status = Status.objects.all()[0]
+    status = status.mode
     return render(request,'status.html',{'status':status})
+
+def manage_date(request):
+    status = Status.objects.all()[0]
+    date = str(status.date)
+    print('date'+str(date))
+    return render(request,'date.html',{'date':date})
 
 def save_user(request):
     if 'stuID' in request.GET:
@@ -138,6 +146,7 @@ def add_name(request):
     return HttpResponseRedirect('/admin/userlist')
 
 def userlist_model(request):
+    print('进来了')
     filename = '用户信息-模板.xlsx'
     path = os.getcwd() + os.sep + 'models'
     file = os.path.join(path, filename)
@@ -187,11 +196,18 @@ def getfile(request):
         return render(request, 'userlist.html', {'userlist': namelist})
     return HttpResponseRedirect('404.html')
 
-def change_status(request):
+def change_mode(request):
     if request.GET.get('status'):
         status = int(request.GET.get('status'))
-        Managers.objects.all().update(status=status)
+        Status.objects.all().update(mode=status)
         return render(request, 'status.html', {'status': status})
+    return HttpResponseRedirect('404.html')
+
+def change_date(request):
+    if request.GET.get('due_date',''):
+        date = str(request.GET.get('due_date'))
+        Status.objects.all().update(date=date)
+        return render(request, 'date.html', {'date': date})
     return HttpResponseRedirect('404.html')
 
 def tolist(source):
@@ -205,12 +221,19 @@ def export(request):
         choicelist = eval(request.POST.get('choicelist'))[1:]
         print(choicelist)
         choicelist = tolist(choicelist)
+        statuslist=[]
         for i in choicelist:
             print('i:'+i)
             status = write_to_middle(i)
+            print('status是啥：')
+            print(status)
             if status=='error':
                 return HttpResponse(status)
-        return HttpResponse('success')
+            statuslist.append(status)
+        print('到底有了啥')
+        print(statuslist)
+        return HttpResponse(statuslist)
+            # return HttpResponse(status)
     return HttpResponse('fail')
 
 def edit_email(request):

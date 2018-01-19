@@ -5,7 +5,8 @@
     <title>主页</title>
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/jqpaginator.min.js"></script>
+    <link rel="stylesheet" href="/static/js/theme/default/laydate.css?v=5.0.8" id="layuicss-laydate">
+    <script type="text/javascript" src="/static/js/laydate.js"></script>
     <style>
         /* 下拉按钮样式 */
         .dropbtn {
@@ -65,7 +66,14 @@
             {% endif %}
             <button class="dropbtn" id="manage">管理用户信息</button>
             <button class="dropbtn" id="sub_record">查看提交记录</button>
-            <button class="dropbtn" id="change_status">改变状态</button>
+            {#            <button class="dropbtn" id="change_status">改变状态</button>#}
+            <div class="dropdown">
+                <button class="dropbtn">改变状态</button>
+                <div class="dropdown-content">
+                    <a href="javascript:change_mode()">改变模式</a>
+                    <a href="javascript:change_date()">项目申报截止日期</a>
+                </div>
+            </div>
             <button class="dropbtn" id="send_email">发送邮件</button>
         </div>
     </nav>
@@ -112,19 +120,6 @@
 
         });
     });
-    $('#change_status').click(function () {
-        $.ajax({
-            url: 'status',
-            data: '',
-            success: function (data) {
-                $('#results_div').html(data);
-            },
-            error: function (data) {
-                console.log(data);
-            }
-
-        });
-    });
     $('#send_email').click(function () {
         $.ajax({
             url: 'edit_email',
@@ -138,6 +133,32 @@
 
         });
     });
+    var change_mode = function () {
+        $.ajax({
+            url: 'status',
+            data: '',
+            success: function (data) {
+                $('#results_div').html(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+
+        });
+    };
+    var change_date = function () {
+        $.ajax({
+            url: 'date',
+            data: '',
+            success: function (data) {
+                $('#results_div').html(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+
+        });
+    };
 
 </script>
 </body>

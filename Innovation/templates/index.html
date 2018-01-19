@@ -72,8 +72,12 @@
             <div class="dropdown">
                 <button class="dropbtn">项目相关</button>
                 <div class="dropdown-content">
-                    <a href="/basic">申报项目</a>
-                    <a href="/myproject">我的项目</a>
+                    {% if status %}
+                        <a href="/basic">申报项目</a>
+                    {% else %}
+                        <a href="javascript:alertvoid()">申报项目</a>
+                    {% endif %}
+                    <a href="javascript:mypro()">我的项目</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -84,7 +88,10 @@
             </div>
         </div>
     </nav>
+    <div id="results_div">
+    </div>
 </div>
+
 <script>
     $('#cancel').click(function () {
         $.ajax({
@@ -139,6 +146,22 @@
             }
         });
     });
+    var mypro = function () {
+        $.ajax({
+            url: '/mypro',
+            data: "",
+            type: "GET",
+            success: function (data) {
+                $('#results_div').html(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    };
+    var alertvoid = function () {
+        alert('项目申请已截止！');
+    };
 </script>
 </body>
 </html>

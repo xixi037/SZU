@@ -1,4 +1,5 @@
 import os
+from django.http import HttpResponse
 
 import pythoncom
 import time
@@ -16,6 +17,7 @@ def todict(source):
 def write_to_middle(id):
     print('到这里了')
     print(id)
+
     if Middle.objects.filter(leader_id=id):
         middle_info = Middle.objects.filter(leader_id=id)
         user_info = Users.objects.filter(username=id)
@@ -30,6 +32,22 @@ def write_to_middle(id):
                 os.makedirs(open_path)
             file = os.path.join(open_path, filename)
             print(file)
+
+            for info1 in pro_info:
+                pro_name = info1.pro_name
+                tutor_name = info1.tutor_id
+
+            for info2 in user_info:
+                pro_leader = info2.name
+
+            savename = '中期报告_' + tutor_name + '_' + pro_leader + '_' + pro_name + '.doc'
+
+            savepath = os.path.join(save_path, savename)
+            if os.path.exists(savepath):
+                print('路径是...')
+                print(savepath.encode('utf-8'))
+                return HttpResponse(savepath.encode('utf-8'))
+
             pythoncom.CoInitialize()
             try:
                 app = win32com.client.Dispatch('word.Application')
@@ -92,25 +110,19 @@ def write_to_middle(id):
             if info.pro_harvest.strip() != '':
                 pro_harvest_pos.Range.Text = harvest_title + '\n' + info.pro_harvest
 
-        for info in pro_info:
-            pro_name_pos.Range.Text = info.pro_name
-            tutor_name_pos.Range.Text = info.tutor_id
-            pro_name=info.pro_name
-            tutor_name=info.tutor_id
-
-        for info in user_info:
-            pro_leader_pos.Range.Text = info.name
-            leader_phone_pos.Range.Text = info.phone
-            pro_leader=info.name
+            for info in pro_info:
+                pro_name_pos.Range.Text = info.pro_name
+                tutor_name_pos.Range.Text = info.tutor_id
+            for info in user_info:
+                pro_leader_pos.Range.Text = info.name
+                leader_phone_pos.Range.Text = info.phone
 
 
-        savename = '中期报告_' + tutor_name + '_' + pro_leader + '_' + pro_name + '.doc'
-        save_path = os.path.join(save_path, savename)
-        doc.SaveAs(save_path)
+        doc.SaveAs(savepath)
         doc.Close()
         app.Quit()
         print('保存完毕')
         date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         Middle.objects.filter(leader_id=id).update(export_time=date)
-        return 'success'
+        return HttpResponse(savepath.encode('utf-8'))
     return 'error'

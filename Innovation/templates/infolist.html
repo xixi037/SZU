@@ -40,6 +40,7 @@
     </div>
     <p>{{ pageIndex }}/{{ page }}</p>
 </div>
+<script type="text/javascript" src="/static/js/jqpaginator.min.js"></script>
 <script>
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
@@ -61,12 +62,16 @@
                     if (data == 'fail') {
                         alert('没有选择');
                     }
-                    else if (data == 'success') {
-                        alert('成功导出！');
-                        $('#sub_record').click();
+                    else if (data == 'error') {
+
+                        alert('有文件导出失败！');
                     }
                     else {
-                        alert('有文件导出失败！');
+                        {#                        alert('成功导出！');#}
+                        console.log(data);
+{#                        window.location.href = '/downloadfile?url=' + data;#}
+                        $('#sub_record').click();
+
                     }
 
                 },
@@ -80,7 +85,7 @@
             alert('没有选中任何选项！')
         }
     });
-        $.jqPaginator('#pagination0', {
+    $.jqPaginator('#pagination0', {
         totalPages: {{ page }},
         visiblePages: 5,
         currentPage: {{ pageIndex }},

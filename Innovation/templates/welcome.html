@@ -75,7 +75,11 @@
             <div class="dropdown">
                 <button class="dropbtn">修改信息</button>
                 <div class="dropdown-content">
-                    <a href="/basic?from=welcome">修改项目信息</a>
+                    {% if date %}
+                        <a href="/basic?from=welcome">修改项目信息</a>
+                    {% else %}
+                        <a href="javascript:alertvoid()">修改项目信息</a>
+                    {% endif %}
                     <a href="/chgpwd">修改密码</a>
                 </div>
             </div>
@@ -121,9 +125,10 @@
             {% endif %}
         </div>
     </nav>
+    <div id="results_div">
+    </div>
 </div>
-<div id="results_div">
-</div>
+
 <script>
     $('#cancel').click(function () {
         $.ajax({
@@ -192,6 +197,9 @@
         });
 
     });
+    var alertvoid = function () {
+        alert('项目信息可修改日期已截止！如需修改，请联系相关负责人！');
+    };
 </script>
 </body>
 </html>
