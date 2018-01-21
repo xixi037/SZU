@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls.static import static
 
-from Innovation import views, admin_op
+from Innovation import views, admin_op, exportword
 from SZU import settings
 
 urlpatterns = [
@@ -39,7 +39,8 @@ urlpatterns = [
                   url(r'^admin/add_user', admin_op.add_name),
                   url(r'^admin/upload/file$', admin_op.getfile),
                   url(r'^admin/userlist_model$', admin_op.userlist_model),
-                  url(r'^export$', admin_op.export),
+                  url(r'^admin/write_to_middle$', exportword.write_to_middle),
+                  # url(r'^export$', admin_op.export),
                   # url(r'^apply_operation',views.write_to_application),
                   url(r'^apply$', views.apply),
                   url(r'^apply_model$', views.apply_model),

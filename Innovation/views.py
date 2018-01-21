@@ -180,7 +180,9 @@ def downloadFile(request):
         filename = request.GET["url"]
         file_name = filename.split(os.sep)[-1]
         print(filename)
-
+        # filenamelist = [r'C:\Users\HP\Desktop\SZU\middle\中期报告_邓云_陈希曦_基于Python的网络爬虫.doc',r'C:\Users\HP\Desktop\SZU\middle\中期报告_邓云_黄树华_基于深度学习的肌电图、脑电图分析2.doc']
+        # for filename in filenamelist:
+        file_name = filename.split(os.sep)[-1]
         def file_iterator(file_name, chunk_size=512):
             with open(file_name, 'rb') as f:
                 while True:
@@ -221,6 +223,8 @@ def check(request):
 
 
 def login(request):
+    # if request.COOKIES.get('username')!='':
+    #     return HttpResponseRedirect('/welcome')
     return render(request, 'login.html')
 
 
@@ -360,7 +364,7 @@ def change_password_op(request):
 
 
 def test(request):
-    return render(request, 'test.html')
+    return render(request, 'test_download.html')
 
 
 def send_email(request):

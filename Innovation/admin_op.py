@@ -14,6 +14,8 @@ from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status
 
 
 def login(request):
+    # if request.COOKIES.get('username')!='':
+    #     return HttpResponseRedirect('/admin/welcome')
     return render(request,'admin_login.html')
 
 def check(request):
@@ -221,7 +223,7 @@ def export(request):
         choicelist = eval(request.POST.get('choicelist'))[1:]
         print(choicelist)
         choicelist = tolist(choicelist)
-        statuslist=[]
+        statuslist = []
         for i in choicelist:
             print('i:'+i)
             status = write_to_middle(i)
@@ -231,9 +233,9 @@ def export(request):
                 return HttpResponse(status)
             statuslist.append(status)
         print('到底有了啥')
-        print(statuslist)
+        # print(statuslist)
         return HttpResponse(statuslist)
-            # return HttpResponse(status)
+        # return HttpResponse(status)
     return HttpResponse('fail')
 
 def edit_email(request):

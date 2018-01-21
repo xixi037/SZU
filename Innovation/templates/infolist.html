@@ -51,27 +51,46 @@
     });
     $("#export").click(function () {
         var data = $('#infolist').serializeArray();
+        console.log(JSON.stringify(data));
         if (data.length > 1) {
             $.ajax({
-                url: '/export',
+                {#                url: '/export',#}
+                url: 'write_to_middle',
                 data: {
                     'choicelist': JSON.stringify(data)
                 },
                 type: 'POST',
                 success: function (data) {
-                    if (data == 'fail') {
-                        alert('没有选择');
-                    }
-                    else if (data == 'error') {
-
-                        alert('有文件导出失败！');
+                    if (data == 'error') {
+                        alert('没有选择！');
                     }
                     else {
-                        {#                        alert('成功导出！');#}
                         console.log(data);
-{#                        window.location.href = '/downloadfile?url=' + data;#}
-                        $('#sub_record').click();
+                        var pathlist = data['path'];
+                        for (var i = 0; i < pathlist.length; i++) {
+                            window.open('/downloadfile?url=' + pathlist[i]);
+{#                            console.log(pathlist[i]);#}
+{#                            $('#download_frame').attr('src', '/downloadfile?url=' + pathlist[i]);#}
+{#                            break;#}
+{#                            console.log(pathlist[i]);#}
+{#                            console.log('/downloadfile?url=' + pathlist[i]);#}
+{#                            $.ajax({#}
+{#                                url: '/downloadfile',#}
+{#                                data: {#}
+{#                                    'url': pathlist[i]#}
+{#                                },#}
+{#                                type: 'GET',#}
+{#                                success:function(data){#}
+{##}
+{#                                },#}
+{#                                error:function(data){#}
+{#                                    console.log(data);#}
+{#                                }#}
+{#                            });#}
 
+{#                            window.location.href = '/downloadfile?url=' + pathlist[i];#}
+                            console.log('第' + i.toString() + '次');
+                        }
                     }
 
                 },
