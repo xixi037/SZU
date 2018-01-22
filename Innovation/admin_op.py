@@ -13,10 +13,11 @@ from Innovation.exportword import write_to_middle
 from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status
 
 
+def admin_base(request):
+    return render(request, 'admin/admin_base.html')
+
 def login(request):
-    # if request.COOKIES.get('username')!='':
-    #     return HttpResponseRedirect('/admin/welcome')
-    return render(request,'admin_login.html')
+    return render(request, 'admin/admin_login.html')
 
 def check(request):
     if request.method == 'POST':
@@ -25,7 +26,7 @@ def check(request):
         user = Managers.objects.filter(username__exact=username,password__exact=password)
         if user:
             flag = 0
-            response = HttpResponseRedirect('/admin/welcome')
+            response = HttpResponseRedirect('/admin/base')
             response.set_cookie('username', username, 3600)
             response.set_cookie('flag', flag, 3600)
             return response
@@ -40,7 +41,7 @@ def admin_welcome(request):
     if request.COOKIES.get('username', '') != '' and request.COOKIES.get('flag') == '0':
         print('进来啦')
         username = request.COOKIES.get('username')
-        return render(request,'admin_welcome.html',{'username':username})
+        return render(request, 'admin/admin_welcome.html', {'username':username})
     return HttpResponseRedirect('/admin/login')
 
 def manage_info(request):
@@ -73,7 +74,7 @@ def manage_info(request):
     print(pageIndex)
     info = infolist[(pageIndex - 1) * 20:20 * pageIndex]
 
-    return render(request,'infolist.html',{'infolist':info,'pageIndex':pageIndex,'count':count,'page':page})
+    return render(request, 'admin/infolist.html', {'infolist':info, 'pageIndex':pageIndex, 'count':count, 'page':page})
 
 def manage_user(request):
     alluser = Users.objects.all()
@@ -83,18 +84,18 @@ def manage_user(request):
     pageIndex = int(request.GET.get('pageIndex',1))
     print(pageIndex)
     userlist = Users.objects.all()[(pageIndex-1)*20:20*pageIndex]
-    return render(request,'userlist.html',{'userlist':userlist,'pageIndex':pageIndex,'count':count,'page':page})
+    return render(request, 'admin/userlist.html', {'userlist':userlist, 'pageIndex':pageIndex, 'count':count, 'page':page})
 
 def manage_status(request):
     status = Status.objects.all()[0]
     status = status.mode
-    return render(request,'status.html',{'status':status})
+    return render(request, 'admin/status.html', {'status':status})
 
 def manage_date(request):
     status = Status.objects.all()[0]
     date = str(status.date)
     print('date'+str(date))
-    return render(request,'date.html',{'date':date})
+    return render(request, 'admin/date.html', {'date':date})
 
 def save_user(request):
     if 'stuID' in request.GET:
@@ -103,16 +104,17 @@ def save_user(request):
         name = request.GET['name']
         sex = request.GET['sex']
         major = request.GET['major']
+        classID = request.GET['classID']
         pageIndex = request.GET.get('pageIndex','1')
         record = Users.objects.filter(username=stuID)
 
         if not record:
             print('不存在')
-            Users.objects.create(username=stuID, password=stuID[-6:], name=name, sex=sex,major=major)
+            Users.objects.create(username=stuID, password=stuID[-6:], name=name, sex=sex,major=major,classID=classID)
         else:
             print('已存在')
-            Users.objects.filter(username=stuID).update(name=name, sex=sex,major=major)
-    return HttpResponseRedirect('/admin/userlist?pageIndex='+str(pageIndex))
+            Users.objects.filter(username=stuID).update(name=name,sex=sex,major=major,classID=classID)
+    return HttpResponseRedirect('/admin/base/userlist?pageIndex='+str(pageIndex))
 
 def del_name(request):
     if request.method == 'GET':
@@ -127,7 +129,7 @@ def del_name(request):
             Members.objects.filter(pro_id=id).delete()
             if Middle.objects.filter(leader_id=stuID):
                 Middle.objects.filter(leader_id=stuID).delete()
-    return HttpResponseRedirect('/admin/userlist?pageIndex='+str(pageIndex))
+    return HttpResponseRedirect('/admin/base/userlist?pageIndex='+str(pageIndex))
 
 def add_name(request):
     if request.method == 'GET':
@@ -136,6 +138,7 @@ def add_name(request):
         sex = request.GET['sex']
         major = request.GET['major']
         classID = request.GET['classID']
+        pageIndex = request.GET.get('pageIndex', '1')
         record = Users.objects.filter(username=stuID)
         if not record:
             print('不存在')
@@ -145,7 +148,7 @@ def add_name(request):
             print('已存在')
             Users.objects.filter(username=stuID).update(name=name, sex=sex, major=major, classID=classID)
 
-    return HttpResponseRedirect('/admin/userlist')
+    return HttpResponseRedirect('/admin/base/userlist?pageIndex='+str(pageIndex))
 
 def userlist_model(request):
     print('进来了')
@@ -158,6 +161,7 @@ def userlist_model(request):
 def getfile(request):
     if request.FILES.get('file','') != '':
         file_obj = request.FILES.get('file')
+        pageIndex = request.GET.get('pageIndex', '1')
         path = os.getcwd() + os.sep + 'models'
         savename = '上传-用户名单.xlsx'
         filepath = os.path.join(path, savename)
@@ -194,22 +198,22 @@ def getfile(request):
         else:
             return HttpResponse('上传文件格式有误！')
         wb.save(filepath)
-        namelist = Users.objects.all()
-        return render(request, 'userlist.html', {'userlist': namelist})
+        return HttpResponse('success')
     return HttpResponseRedirect('404.html')
 
 def change_mode(request):
     if request.GET.get('status'):
         status = int(request.GET.get('status'))
         Status.objects.all().update(mode=status)
-        return render(request, 'status.html', {'status': status})
+        return render(request, 'migrations/status.html', {'status': status})
     return HttpResponseRedirect('404.html')
 
 def change_date(request):
     if request.GET.get('due_date',''):
         date = str(request.GET.get('due_date'))
+        print(date)
         Status.objects.all().update(date=date)
-        return render(request, 'date.html', {'date': date})
+        return render(request, 'admin/date.html', {'date': date})
     return HttpResponseRedirect('404.html')
 
 def tolist(source):
@@ -240,3 +244,26 @@ def export(request):
 
 def edit_email(request):
     return HttpResponse('还未完成 敬请期待...')
+
+def change_password(request):
+    return render(request, 'admin/admin_change_password.html')
+
+def check_password(request):
+    # print('jinlaile')
+    if request.POST.get('former') != None:
+        username = request.COOKIES.get('username')
+        former = request.POST.get('former')
+        record = Managers.objects.filter(username=username, password=former)
+        if record:
+            return HttpResponse('认证成功')
+        else:
+            return HttpResponse('密码错误')
+    return HttpResponseRedirect('404')
+
+def change_password_op(request):
+    if request.POST.get('latest') != None:
+        username = request.COOKIES.get('username')
+        latest = request.POST.get('latest')
+        Managers.objects.filter(username=username).update(password=latest)
+        return HttpResponse('success')
+    return HttpResponseRedirect('404')

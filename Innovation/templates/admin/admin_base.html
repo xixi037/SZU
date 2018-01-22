@@ -7,6 +7,8 @@
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/static/Bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/static/Bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/js/theme/default/laydate.css?v=5.0.8" id="layuicss-laydate">
+    <script type="text/javascript" src="/static/js/laydate.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
@@ -16,22 +18,25 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="javascript:home()">Home <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:manage_userlist()">管理用户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:submit_record()">查看提交记录</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        我的项目
+                        修改状态
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        {% if date %}
-                            <a class="dropdown-item" href="/basic">申报项目</a>
-                        {% else %}
-                            <a class="dropdown-item" href="javascript:alertvoid()">申报项目</a>
-                        {% endif %}
-                        <a class="dropdown-item" href="javascript:mypro()">查看我的项目</a>
+                        <a class="dropdown-item" href="javascript:change_mode()">修改提交模式</a>
+                        <a class="dropdown-item" href="javascript:change_date()">申报截止日期</a>
+                        <a class="dropdown-item" href="/admin/chgpwd">修改密码</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/chgpwd">修改密码</a>
+                    <a class="nav-link" href="#">发送邮件</a>{#"javascript:send_email()"#}
                 </li>
             </ul>
             {% if username != '' %}
@@ -43,10 +48,24 @@
 </nav>
 {% block content %}{% endblock %}
 <script>
-
     var home = function () {
-        window.location.href = "/index";
+        window.location.href = "/admin/base";
     };
+    var manage_userlist = function () {
+        window.location.href = "/admin/base/userlist";
+    };
+    var submit_record = function () {
+        window.location.href = "/admin/base/infolist";
+    };
+    var change_mode = function () {
+        window.location.href = "/admin/base/status";
+    };
+    var change_date = function () {
+        window.location.href = "/admin/base/date";
+    };
+    {#    var send_email = function () {#}
+    {#        window.location.href = "/admin/send_email";#}
+    {#    }#}
     $('#cancel').click(function () {
         $.ajax({
             url: '/cancel',
@@ -61,12 +80,6 @@
             }
         });
     });
-    var mypro = function () {
-        window.location.href = "/index/mypro";
-    };
-    var alertvoid = function () {
-        alert('项目申请已截止！');
-    };
 </script>
 </body>
 </html>

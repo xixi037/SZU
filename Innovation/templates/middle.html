@@ -33,7 +33,7 @@
     <form id="info">
         {#    {% csrf_token %}#}
         | 基本信息：
-        <table id="t1">
+        <table id="t1" class="table">
             <tbody>
             <tr>
                 <td>项目编号</td>
@@ -160,8 +160,8 @@
                         success: function (data) {
                             console.log(data);
                             alert('提交成功！');
-                            window.location.href = '/welcome';
-                            $('#model_section').html(data);
+                            window.location.href = '/base';
+{#                            $('#model_section').html(data);#}
                         },
                         error: function (data) {
                             console.log(data);
@@ -174,7 +174,7 @@
 
         });
         $('#close').click(function () {
-            window.location.href = '/welcome'
+            window.location.href = '/base'
         });
 
     });

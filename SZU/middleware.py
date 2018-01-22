@@ -26,4 +26,4 @@ class PubAuthMiddleWare(MiddlewareMixin):
             print(request.COOKIES.get('username'))
             pass    #有cookie的直接继续执行
         else:
-            return HttpResponseRedirect('login')   #没有cookie的跳转登录页面
+            return HttpResponseRedirect('/login')   #没有cookie的跳转登录页面

@@ -1,0 +1,106 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}用户信息{% endblock %}
+{% block content %}
+    <div class="container">
+        <button type="button" class="btn btn btn-outline-secondary btn-sm" id="export">导出</button>
+        <form id="infolist">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                {% if infolist %}
+                    <tr>
+                        <th>数目</th>
+                        <th>学号</th>
+                        <th>负责人</th>
+                        <th>导师姓名</th>
+                        <th>项目名称</th>
+                        <th>状态</th>
+                        <th><input type="checkbox" id="checkAll">全选</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in infolist %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.leader_id }}</td>
+                            <td>{{ i.name }}</td>
+                            <td>{{ i.tutor_id }}</td>
+                            <td>{{ i.pro_name }}</td>
+                            {% if  i.export_time %}
+                                <td>已导出 {{ i.export_time }}</td>
+                            {% else %}
+                                <td>未导出</td>
+                            {% endif %}
+                            <td><input type="checkbox" class="subCheckbox" name="choice{{ forloop.counter }}"
+                                       value={{ i.leader_id }}></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </form>
+        <p>共{{ count }}条记录</p>
+        <div class="footer">
+            <ul class="pagination" id="pagination0"></ul>
+        </div>
+        <p>{{ pageIndex }}/{{ page }}</p>
+    </div>
+    <script type="text/javascript" src="/static/js/jqpaginator.min.js"></script>
+    <script>
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+        $("#checkAll").click(function () {
+            var isChecked = $(this).prop("checked");
+            $(".subCheckbox").prop("checked", isChecked);
+        });
+        $("#export").click(function () {
+            var data = $('#infolist').serializeArray();
+            console.log(JSON.stringify(data));
+            if (data.length > 1) {
+                $.ajax({
+                    {#                url: '/export',#}
+                    url: '/admin/write_to_middle',
+                    data: {
+                        'choicelist': JSON.stringify(data)
+                    },
+                    type: 'POST',
+                    success: function (data) {
+                        if (data == 'error') {
+                            alert('没有选择！');
+                        }
+                        else {
+                            console.log(data);
+                            var pathlist = data['path'];
+                            for (var i = 0; i < pathlist.length; i++) {
+                                window.open('/downloadfile?url=' + pathlist[i]);
+                                console.log('第' + i.toString() + '次');
+                            }
+                            window.location.reload();
+                        }
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+
+                });
+            }
+            else {
+                alert('没有选中任何选项！')
+            }
+        });
+        $.jqPaginator('#pagination0', {
+            totalPages: {{ page }},
+            visiblePages: 5,
+            currentPage: {{ pageIndex }},
+            onPageChange: function (page, type) {
+                if (type == 'change') {
+                    window.location.href = 'userlist?pageIndex=' + page;
+                }
+
+            }
+
+        });
+    </script>
+{% endblock %}

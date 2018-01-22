@@ -31,7 +31,7 @@
     <form id="info">
         {#    {% csrf_token %}#}
         | 基本信息：
-        <table id="t1">
+        <table id="t1" class="table">
             <tbody>
             <tr>
                 <td>项目编号</td>
@@ -100,7 +100,7 @@
             data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
         });
         $('#close').click(function () {
-            window.location.href = '/welcome'
+            window.location.href = '/base'
         });
     })
 </script>

@@ -5,11 +5,6 @@ import os
 from django.forms import model_to_dict
 from email.header import make_header
 
-import pythoncom
-import win32com.client
-from django.core.mail import send_mail
-
-from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
@@ -17,6 +12,19 @@ from django.shortcuts import render
 
 from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status
 
+def base(request):
+    username = request.COOKIES.get('username')
+    if ProInfo.objects.filter(leader_id=username):
+        status = Status.objects.all()[0]
+        mode = status.mode
+        date1 = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        date1 = date1.replace("-", "")
+        date = Status.objects.all()[0]
+        date2 = str(date.date)
+        date2 = date2.replace("-", "")
+        return render(request, 'base.html', {'username': username, 'status': mode, 'date': date1 <= date2})
+    else:
+        return HttpResponseRedirect('/index')
 
 def todict(source):
     target = {}
@@ -212,7 +220,7 @@ def check(request):
             flag = 1
 
             if ProInfo.objects.filter(leader_id=username):
-                response = HttpResponseRedirect('/basic')
+                response = HttpResponseRedirect('/base')
             else:
                 response = HttpResponseRedirect('/index')
             response.set_cookie('username', username, 3600)
@@ -223,8 +231,6 @@ def check(request):
 
 
 def login(request):
-    # if request.COOKIES.get('username')!='':
-    #     return HttpResponseRedirect('/welcome')
     return render(request, 'login.html')
 
 
@@ -235,10 +241,10 @@ def basic(request):
     date2 = str(date.date)
     date2 = date2.replace("-", "")
     if date1>date2:
-        return HttpResponseRedirect('/welcome')
+        return HttpResponseRedirect('/base')
     if Status.objects.filter():
         username = request.COOKIES.get('username')
-        if request.GET.get('from', '') == 'welcome':
+        if request.GET.get('from', '') == 'base':
             user_info = Users.objects.get(username=username)
             pro_info = ProInfo.objects.get(leader_id=username)
             mem_info = Members.objects.filter(pro_id=pro_info.id)
@@ -248,7 +254,7 @@ def basic(request):
             memlist = '/'.join(memlist)
             return render(request, 'basic.html', {'user_info': user_info, 'pro_info': pro_info, 'memlist': memlist})
         elif ProInfo.objects.filter(leader_id=username):
-            return HttpResponseRedirect('/welcome')
+            return HttpResponseRedirect('/base')
         else:
             user_info = Users.objects.get(username=username)
             return render(request, 'basic.html', {'user_info': user_info})
@@ -324,7 +330,7 @@ def getfile(request):
                         tutor_name = i.tutor_name
                         pro_name = i.pro_name
                     else:
-                        return HttpResponseRedirect('/welcome')
+                        return HttpResponseRedirect('/base')
                     path = os.getcwd() + os.sep + 'applications'
                     savename = '申请书_' + tutor_name + '_' + name + '_' + pro_name + '.doc'
                     filepath = os.path.join(path, savename)
@@ -332,7 +338,7 @@ def getfile(request):
                     dest = open(filepath, 'wb+')
                     dest.write(file_obj.read())
                     dest.close()
-            return render(request, 'welcome.html', {'username': username})
+            return render(request, 'base.html', {'username': username})
         return HttpResponseRedirect('/login')
     return HttpResponseRedirect('/upload')
 
@@ -416,15 +422,26 @@ def index(request):
     date = Status.objects.all()[0]
     date2 = str(date.date)
     date2 = date2.replace("-","")
-    print(date2)
+    print(date1<=date2)
     # if date1<=date2:
     #     status = 1
     # else:
     #     status = 0
-    return render(request, 'index.html',{'status':date1<=date2})
+    # print(status)
+    username = request.COOKIES.get('username')
+    if ProInfo.objects.filter(leader_id=username):
+        status = Status.objects.all()[0]
+        mode = status.mode
+        date1 = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        date1 = date1.replace("-", "")
+        date = Status.objects.all()[0]
+        date2 = str(date.date)
+        date2 = date2.replace("-", "")
+        return render(request, 'base.html', {'username': username, 'status': mode, 'date': date1 <= date2})
+    return render(request, 'index.html',{'date':date1 <= date2})
 
 
-def mypro(request):
+def base_mypro(request):
     username = request.COOKIES.get('username')
 
     info = []
@@ -459,4 +476,41 @@ def mypro(request):
                 info2["name"] = leader.name
                 info.append(info2)
 
-    return render(request, 'mypro.html', {'infolist': info})
+    return render(request, 'base_mypro.html', {'infolist': info})
+
+def index_mypro(request):
+    username = request.COOKIES.get('username')
+    info = []
+    if ProInfo.objects.filter(leader_id=username):
+        leader = Users.objects.get(username=username)
+        pro = ProInfo.objects.filter(leader_id=username)
+        for i in pro:
+            info1 = model_to_dict(i)
+            mem_info = Members.objects.filter(pro_id=i.id)
+            memlist = []
+            for i in mem_info:
+                memlist.append(i.stu_id)
+            memlist = '/'.join(memlist)
+            info1["pro_mems"] = memlist
+            info1["name"] = leader.name
+            info.append(info1)
+    if Members.objects.filter(stu_id=username):
+        print('')
+        pro = Members.objects.filter(stu_id=username)
+        for i in pro:
+            id = i.pro_id
+            pro = ProInfo.objects.filter(id=id)
+            for i in pro:
+                info2 = model_to_dict(i)
+                leader = Users.objects.get(username=i.leader_id)
+                mem_info = Members.objects.filter(pro_id=i.id)
+                memlist = []
+                for k in mem_info:
+                    memlist.append(k.stu_id)
+                memlist = '/'.join(memlist)
+                info2["pro_mems"] = memlist
+                info2["name"] = leader.name
+                info.append(info2)
+
+    return render(request, 'index_mypro.html', {'infolist': info})
+

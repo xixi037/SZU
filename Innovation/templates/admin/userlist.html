@@ -1,0 +1,211 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}用户信息{% endblock %}
+{% block content %}
+    <div class="container">
+        <button id="add" class="btn btn btn-outline-secondary btn-sm">新增
+        </button>
+        <button id="download_model" class="btn btn btn-outline-secondary btn-sm">下载模板
+        </button>
+        <form id="uploadForm">
+            {% csrf_token %}
+            上传文件： <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                         name="file"
+                         id="file">
+            <input type="button" value="上传" class="btn btn btn-outline-secondary btn-sm" onclick="doUpload()"/>
+        </form>
+        <form action="add_user" method="get" id="addform">
+            <table>
+                <tr>
+                    <td><input type="hidden" class="add" placeholder="学号" name="stuID"></td>
+                    <td><input type="hidden" class="add" placeholder="姓名" name="name"></td>
+                    <td><input type="hidden" class="add" placeholder="性别" name="sex"></td>
+                    <td><input type="hidden" class="add" placeholder="专业" name="major"></td>
+                    <td><input type="hidden" class="add" placeholder="班级" name="classID"></td>
+                </tr>
+            </table>
+        </form>
+        <button style="display:none" id="ok" class="btn btn btn-outline-secondary btn-sm">确定</button>
+
+        <form id="userlist">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                <tbody>
+                {% if userlist %}
+                    <thead class="thead-light">
+                    <tr>
+                        <th>序号</th>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>专业</th>
+                        <th>班级</th>
+                        <th>编辑</th>
+                        <th>删除</th>
+                    </tr>
+                    </thead>
+                    {% for i in userlist %}
+                        <tr>
+                            <td><span>{{ forloop.counter }}</span></td>
+                            <td><span>{{ i.username }}</span></td>
+                            <td><span>{{ i.name }}</span></td>
+                            <td><span>{{ i.sex }}</span></td>
+                            <td><span>{{ i.major }}</span></td>
+                            <td><span>{{ i.classID }}</span></td>
+                            <td id="editline"><a href="javascript:clickEdit({{ forloop.counter }})" class="edit"
+                                                 id="edit{{ forloop.counter }}">编辑</a></td>
+                            <td><a href="javascript:clickDelete({{ forloop.counter }})" id="delete{{ forloop.counter }}"
+                                   name={{ i.username }}>删除</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </form>
+        <p>共{{ count }}条记录</p>
+        <div class="footer">
+            <ul class="pagination" id="pagination0"></ul>
+        </div>
+        <p>{{ pageIndex }}/{{ page }}</p>
+    </div>
+    <script type="text/javascript" src="../../../static/js/jqpaginator.min.js"></script>
+    <script>
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+        $('#download_model').click(function () {
+            $.ajax({
+                url: '/admin/userlist_model',
+                data: "",
+                type: "GET",
+                success: function (data) {
+                    window.location.href = '/downloadfile?url=' + data
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+        $('#add').click(function () {
+            $('.add').prop('type', 'text');
+            $('#ok').show();
+        });
+        var clickDelete = function (index) {
+            var elem = '#delete' + index.toString();
+            var stuID = $(elem).attr('name');
+            console.log('到这里了');
+            console.log(stuID);
+            var con = confirm('确认删除么？');
+            if (con == true) {
+                $.ajax({
+                    url: '/admin/del_user',
+                    data: 'stuID=' + stuID + '&pageIndex=' +{{ pageIndex }},
+                    type: "GET",
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        };
+
+        function doUpload() {
+            var formData = new FormData($("#uploadForm")[0]);
+            console.log(formData);
+            $.ajax({
+                url: '/admin/upload_file',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 'success') {
+                        alert('成功上传');
+                        window.location.reload();
+                    }
+
+                },
+                error: function (data) {
+                    alert('error');
+                    console.log(data);
+                }
+            });
+        }
+
+        $('#ok').click(function () {
+            console.log($('.add').length);
+            var len = $('.add').length;
+            var flag = 1;
+            for (i = 0; i < len; i++) {
+                if ($('.add').eq(i).val() === "") {
+                    flag = 0;
+                    alert("输入全不能为空！请重新填写");
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var con = confirm('确认添加么？');
+                if (con == true) {
+                    $.ajax({
+                        url: '/admin/add_user',
+                        data: $('#addform').serialize(),
+                        type: "GET",
+                        success: function (data) {
+                            window.location.reload();
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            }
+        });
+        var clickEdit = function (index) {
+            var elem = '#edit' + index.toString();
+            var e_length = $(elem).parent().parent().find('span').length;
+            var e_value;
+            var attrlist = ['forloop', 'stuID', 'name', 'sex', 'major', 'classID'];
+            for (i = 1; i < e_length; i++) {
+                e_value = $(elem).parent().parent().find('span')[i].innerHTML;
+                $(elem).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name=' + attrlist[i] + ' value="' + e_value + '">';
+            }
+            $(elem).parent().parent().find('#editline')[0].innerHTML = '<a href="javascript:saveEdit();" class="save">保存</a>';
+        };
+
+        function saveEdit() {
+            console.log($('#userlist').serialize());
+            var con = confirm('确认保存么？');
+            if (con == true) {
+                $.ajax({
+                    url: '/admin/save',
+                    data: $('#userlist').serialize() + '&pageIndex=' +{{ pageIndex }},
+
+                    type: "GET",
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        }
+
+        $.jqPaginator('#pagination0', {
+            totalPages: {{ page }},
+            visiblePages: 5,
+            currentPage: {{ pageIndex }},
+            onPageChange: function (page, type) {
+                if (type == 'change') {
+                    window.location.href = '/admin/base/userlist?pageIndex=' + page;
+                }
+
+            }
+
+        });
+
+    </script>
+{% endblock %}

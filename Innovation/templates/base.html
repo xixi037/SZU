@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}我的主页{% endblock %}</title>
+    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/Bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/static/Bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="javascript:home()">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:mypro()">我的项目</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        修改信息
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {% if date %}
+                            <a class="dropdown-item" href="/basic?from=base">修改项目信息</a>
+                        {% else %}
+                            <a class="dropdown-item" href="javascript:alertvoid()">修改项目信息</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="/chgpwd">修改密码</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    {% if status == 1 %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            申请书
+                        </a>
+                    {% else %}
+                        <a class="nav-link dropdown-toggle disabled" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            申请书
+                        </a>
+                    {% endif %}
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/apply">在线填写</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    {% if status == 2 %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            中期报告
+                        </a>
+                    {% else %}
+                        <a class="nav-link dropdown-toggle disabled" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            中期报告
+                        </a>
+                    {% endif %}
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/middle">在线填写</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    {% if status == 3 %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            结题报告
+                        </a>
+                    {% else %}
+                        <a class="nav-link dropdown-toggle disabled" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            结题报告
+                        </a>
+                    {% endif %}
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">下载模板</a>
+                        <a class="dropdown-item" href="#">上传文件</a>
+                    </div>
+                </li>
+            </ul>
+            {% if username != '' %}
+                <button id="cancel" class="btn btn-outline-primary my-2 my-sm-0">注销</button>
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
+{% block content %}{% endblock %}
+<script>
+    console.log(document.cookie);
+    var home = function () {
+        window.location.href = "/base";
+    };
+    var mypro = function () {
+        window.location.href = "/base/mypro";
+    };
+    var alertvoid = function () {
+        alert('项目信息可修改日期已截止！如需修改，请联系相关负责人！');
+    };
+    $('#cancel').click(function () {
+        $.ajax({
+            url: '/cancel',
+            data: $('#table2').serialize(),
+            type: "GET",
+            success: function (data) {
+                alert('注销成功！');
+                location.reload();
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    });
+</script>
+</body>
+</html>

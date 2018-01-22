@@ -5,20 +5,20 @@
     <title>申报基本信息填写</title>
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
-    <style>
-        #basic_info {
-            position: absolute;
-            top: 50%;
-            height: 200px;
-            margin-top: -100px;
-        }
-    </style>
+    {#    <style>#}
+    {#        #basic_info {#}
+    {#            position: absolute;#}
+    {#            top: 50%;#}
+    {#            height: 200px;#}
+    {#            margin-top: -100px;#}
+    {#        }#}
+    {#    </style>#}
 </head>
 <body>
 <div class="container">
     <b>以下内容需要全部填写</b>
     <form id="basic_info">
-        <table>
+        <table class="table">
             <tbody>
             <tr>
                 <td>负责人姓名</td>
@@ -32,17 +32,11 @@
                 <td>导师姓名</td>
                 <td><input type="text" name="tutor_name" id="tutor_name" value={{ pro_info.tutor_id }}></td>
             </tr>
-
-
             <tr>
                 <td>负责人手机号</td>
                 <td><input type="text" name="leader_phone" id="leader_phone" value={{ user_info.phone }}></td>
                 <td>负责人邮箱</td>
                 <td><input type="text" name="leader_email" id="leader_email" value={{ user_info.email }}></td>
-                {#                <td>负责人性别</td>#}
-                {#                <td><input type="text" name="sex" readonly="true" value={{ user_info.sex }}></td>#}
-                {#                <td>负责人专业</td>#}
-                {#                <td><input type="text" name="major" readonly="true" value={{ user_info.major }}></td>#}
             </tr>
             <tr>
                 <td colspan="3">成员学号(负责人除外，用“/”分割)</td>
@@ -51,8 +45,10 @@
             </tbody>
         </table>
     </form>
-    <button type="button" id="sub">提交</button>
-    <button type="button" id="close">关闭</button>
+
+
+    <button type="button" id="sub" class="btn btn btn-outline-secondary btn-sm">提交</button>
+    <button type="button" id="close" class="btn btn btn-outline-secondary btn-sm">关闭</button>
 </div>
 <script>
     $('#sub').click(function () {
@@ -79,7 +75,7 @@
                     type: 'GET',
                     success: function (data) {
                         if (data == 'success') {
-                            window.location.href = '/welcome';
+                            window.location.href = '/base';
                         }
                         else {
                             alert('均不能为空!');
@@ -96,7 +92,7 @@
 
     });
     $('#close').click(function () {
-        window.location.href = '/welcome'
+        window.location.href = '/base'
     });
 </script>
 </body>

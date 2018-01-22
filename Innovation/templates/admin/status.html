@@ -1,5 +1,8 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}修改模式{% endblock %}
+{% block content %}
 <hr>
-<div id="result_div1">
+<div class="container">
     <form id="mode_form">
         {% csrf_token %}
         请选择状态<br/><br/>
@@ -20,12 +23,12 @@
     });
     $('#ok1').click(function () {
         $.ajax({
-            url: 'change_mode',
+            url: '/admin/change_mode',
             data: $('#mode_form').serialize(),
             type: "GET",
             success: function (data) {
                 alert('更改成功');
-                $('#results_div1').html(data);
+                window.location.reload();
             },
             error: function (data) {
                 console.log(data);
@@ -34,3 +37,4 @@
     });
 
 </script>
+{% endblock %}
