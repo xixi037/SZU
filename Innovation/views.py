@@ -7,132 +7,39 @@ from email.header import make_header
 
 from django.core.mail import EmailMultiAlternatives
 
-from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse, JsonResponse
 from django.shortcuts import render
 
 from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status
 
+def nav_status(request):
+    status = Status.objects.all()[0]
+    mode = status.mode
+    date_object = Status.objects.all()[0]
+    date = str(date_object.date)
+    date = date.replace("-", "")
+    statusdic = {'status':mode,'date':date}
+    return JsonResponse(statusdic)
+
+
 def base(request):
     username = request.COOKIES.get('username')
     if ProInfo.objects.filter(leader_id=username):
-        status = Status.objects.all()[0]
-        mode = status.mode
-        date1 = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-        date1 = date1.replace("-", "")
-        date = Status.objects.all()[0]
-        date2 = str(date.date)
-        date2 = date2.replace("-", "")
-        return render(request, 'base.html', {'username': username, 'status': mode, 'date': date1 <= date2})
+        # status = Status.objects.all()[0]
+        # mode = status.mode
+        # date1 = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        # date1 = date1.replace("-", "")
+        # date = Status.objects.all()[0]
+        # date2 = str(date.date)
+        # date2 = date2.replace("-", "")
+        # return render(request, 'base.html', {'username': username, 'status': mode, 'date': date1 <= date2})
+        return render(request,'base.html')
     else:
         return HttpResponseRedirect('/index')
 
-def todict(source):
-    target = {}
-    for item in source:
-        target.__setitem__(item.get('name'), item.get('value'))
-    return target
 
 
-def apply(request):
-    if request.COOKIES.get('username', '') != '':
-        username = request.COOKIES.get('username')
-        user = Users.objects.filter(username=username)
-        for i in user:
-            pro_name = i.pro_name
-            tutor_name = i.tutor_name
-            name = i.name
-            sex = i.sex
-            major = i.major
-            phone = i.phone
-            email = i.email
-        return render(request, 'test5.html', {'username': username, 'pro_name': pro_name, 'tutor_name': tutor_name,
-                                              'pro_leader': name, 'sex': sex, 'major': major, 'leader_phone': phone,
-                                              'leader_email': email})
-    return HttpResponseRedirect('/login')
 
-
-def middle(request):
-    if request.COOKIES.get('username', '') != '':
-        username = request.COOKIES.get('username')
-        print(username)
-        pro_middle = Middle.objects.filter(leader_id=username)
-        for i in pro_middle:
-            info = model_to_dict(i)
-            pro_id = i.pro_id
-        print('项目id' + str(pro_id))
-        print(type(i.export_time))
-        pro_info = ProInfo.objects.filter(id=pro_id)
-        for i in pro_info:
-            info['pro_name'] = i.pro_name
-            info['tutor_id'] = i.tutor_id
-            id = i.id
-        mem_info = Members.objects.filter(pro_id=id)
-        memlist = []
-        for i in mem_info:
-            memlist.append(i.stu_id)
-        info["pro_mems"] = '/'.join(memlist)
-        user_info = Users.objects.filter(username=username)
-        for i in user_info:
-            info['pro_leader'] = i.name
-            info['leader_phone'] = i.phone
-        print(info)
-        for i in pro_middle:
-            print(i.status)
-            if i.status == '1':
-                return render(request, 'submitted_middle.html', {'info': info})
-        return render(request, 'middle.html',
-                      {'info': info})
-    return HttpResponseRedirect('/login')
-
-
-def save_middle(request):
-    if request.POST.get('info', '') != '':
-        info = eval(request.POST.get('info'))
-        info = todict(info)
-        pro_num = info.get('pro_num', '')
-        leader_stuID = info.get('leader_stuID', '')
-        # leader_phone = info.get('leader_phone', '')
-        pro_mems = info.get('pro_mems', '')
-        # tutor_name = info.get('tutor_name', '')
-        pro_stime = info.get('pro_stime', '')
-        pro_etime = info.get('pro_etime', '')
-        pro_endtime = info.get('pro_endtime', '')
-        pro_schedule = info.get('pro_schedule', '')
-        pro_source = info.get('pro_source', '')
-        pro_money = info.get('pro_money', '')
-        pro_difficulties = info.get('pro_difficulties', '')
-        pro_advice = info.get('pro_advice', '')
-        pro_change = info.get('pro_change', '')
-        pro_plan = info.get('pro_plan', '')
-        pro_harvest = info.get('pro_harvest', '')
-        status = info.get('status')
-
-        print(leader_stuID)
-        if Middle.objects.filter(leader_id=leader_stuID):
-            Middle.objects.filter(leader_id=leader_stuID).update(pro_num=pro_num, pro_mems=pro_mems,
-                                                                 pro_stime=pro_stime, pro_etime=pro_etime,
-                                                                 pro_endtime=pro_endtime,
-                                                                 pro_schedule=pro_schedule, pro_source=pro_source,
-                                                                 pro_money=pro_money, pro_difficulties=pro_difficulties,
-                                                                 pro_advice=pro_advice, pro_change=pro_change,
-                                                                 pro_plan=pro_plan, pro_harvest=pro_harvest,
-                                                                 status=status)
-        else:
-            if ProInfo.objects.filter(leader_id=leader_stuID):
-                pro_object = ProInfo.objects.filter(leader_id=leader_stuID)
-                for i in pro_object:
-                    pro_id = i.id
-                Middle.objects.create(pro_id=pro_id, leader_id=leader_stuID, pro_num=pro_num, pro_mems=pro_mems,
-                                      pro_stime=pro_stime, pro_etime=pro_etime, pro_endtime=pro_endtime,
-                                      pro_schedule=pro_schedule, pro_source=pro_source, pro_money=pro_money,
-                                      pro_difficulties=pro_difficulties,
-                                      pro_advice=pro_advice, pro_change=pro_change, pro_plan=pro_plan,
-                                      pro_harvest=pro_harvest, status=status)
-            else:
-                return HttpResponseRedirect('404.html')
-
-        print('填写完毕')
-    return HttpResponseRedirect('/middle')
 
 
 def success(request):
@@ -143,43 +50,7 @@ def success(request):
     return response
 
 
-def apply_model(request):
-    if request.COOKIES.get('username', '') != '':
-        username = request.COOKIES.get('username')
-        user_info = ProInfo.objects.filter(leader_id=username)
-        if user_info:
-            filename = '申请报告模板.doc'
-            path = os.getcwd() + os.sep + 'models'
-            file = os.path.join(path, filename)
-            return HttpResponse(file.encode('utf-8'))
-        return HttpResponseRedirect('/basic')
-    return HttpResponseRedirect('/login')
 
-
-def middle_model(request):
-    if request.COOKIES.get('username', '') != '':
-        username = request.COOKIES.get('username')
-        user_info = ProInfo.objects.filter(leader_id=username)
-        if user_info:
-            filename = '中期报告模板.doc'
-            path = os.getcwd() + os.sep + 'models'
-            file = os.path.join(path, filename)
-            return HttpResponse(file.encode('utf-8'))
-        return HttpResponseRedirect('/basic')
-    return HttpResponseRedirect('/login')
-
-
-def conclusion_model(request):
-    if request.COOKIES.get('username', '') != '':
-        username = request.COOKIES.get('username')
-        user_info = ProInfo.objects.filter(leader_id=username)
-        if user_info:
-            filename = '结题报告模板.doc'
-            path = os.getcwd() + os.sep + 'models'
-            file = os.path.join(path, filename)
-            return HttpResponse(file.encode('utf-8'))
-        return HttpResponseRedirect('/basic')
-    return HttpResponseRedirect('/login')
 
 
 def downloadFile(request):
@@ -261,33 +132,7 @@ def basic(request):
     return HttpResponseRedirect('/login')
 
 
-def infostore(request):
-    username = request.GET.get('username')
-    phone = request.GET.get('leader_phone')
-    email = request.GET.get('leader_email')
-    pro_name = request.GET.get('pro_name')
-    tutor_name = request.GET.get('tutor_name')
-    members = request.GET.get('members').strip()
-    memlist = members.split("/")
-    print(memlist)
-    Users.objects.filter(username=username).update(phone=phone, email=email)
-    if ProInfo.objects.filter(leader_id=username):
-        ProInfo.objects.filter(leader_id=username).update(pro_name=pro_name, tutor_id=tutor_name)
-    else:
-        ProInfo.objects.create(leader_id=username, pro_name=pro_name, tutor_id=tutor_name)
-    pro_object = ProInfo.objects.filter(leader_id=username)
-    for i in pro_object:
-        pro_id = i.id
-        print('pro_id是：' + str(pro_id))
-    if Members.objects.filter(pro_id=pro_id):
-        Members.objects.filter(pro_id=pro_id).delete()
-    for i in memlist:
-        Members.objects.create(pro_id=pro_id, stu_id=i)
-    if not Middle.objects.filter(leader_id=username):
-        print('建立中期报告数据库')
-        print(pro_id)
-        Middle.objects.create(pro_id=pro_id, leader_id=username)
-    return HttpResponse('success')
+
 
 
 def welcome(request):
@@ -514,3 +359,122 @@ def index_mypro(request):
 
     return render(request, 'index_mypro.html', {'infolist': info})
 
+def apply_model(request):
+    if request.COOKIES.get('username', '') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '申请报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+
+def middle_model(request):
+    if request.COOKIES.get('username', '') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '中期报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+
+def conclusion_model(request):
+    if request.COOKIES.get('username', '') != '':
+        username = request.COOKIES.get('username')
+        user_info = ProInfo.objects.filter(leader_id=username)
+        if user_info:
+            filename = '结题报告模板.doc'
+            path = os.getcwd() + os.sep + 'models'
+            file = os.path.join(path, filename)
+            return HttpResponse(file.encode('utf-8'))
+        return HttpResponseRedirect('/basic')
+    return HttpResponseRedirect('/login')
+
+def infostore(request):
+    username = request.GET.get('username')
+    phone = request.GET.get('leader_phone')
+    email = request.GET.get('leader_email')
+    pro_name = request.GET.get('pro_name')
+    tutor_name = request.GET.get('tutor_name')
+    members = request.GET.get('members').strip()
+    memlist = members.split("/")
+    print(memlist)
+    Users.objects.filter(username=username).update(phone=phone, email=email)
+    if ProInfo.objects.filter(leader_id=username):
+        ProInfo.objects.filter(leader_id=username).update(pro_name=pro_name, tutor_id=tutor_name)
+    else:
+        ProInfo.objects.create(leader_id=username, pro_name=pro_name, tutor_id=tutor_name)
+    pro_object = ProInfo.objects.filter(leader_id=username)
+    for i in pro_object:
+        pro_id = i.id
+        print('pro_id是：' + str(pro_id))
+    if Members.objects.filter(pro_id=pro_id):
+        Members.objects.filter(pro_id=pro_id).delete()
+    for i in memlist:
+        Members.objects.create(pro_id=pro_id, stu_id=i)
+    if not Middle.objects.filter(leader_id=username):
+        print('建立中期报告数据库')
+        print(pro_id)
+        Middle.objects.create(pro_id=pro_id, leader_id=username)
+    if not
+    return HttpResponse('success')
+
+def middle(request):
+    if request.COOKIES.get('username', '') != '':
+        username = request.COOKIES.get('username')
+        print(username)
+        pro_middle = Middle.objects.filter(leader_id=username)
+        for i in pro_middle:
+            info = model_to_dict(i)
+            pro_id = i.pro_id
+        print('项目id' + str(pro_id))
+        print(type(i.export_time))
+        pro_info = ProInfo.objects.filter(id=pro_id)
+        for i in pro_info:
+            info['pro_name'] = i.pro_name
+            info['tutor_id'] = i.tutor_id
+            id = i.id
+        mem_info = Members.objects.filter(pro_id=id)
+        memlist = []
+        for i in mem_info:
+            memlist.append(i.stu_id)
+        info["pro_mems"] = '/'.join(memlist)
+        user_info = Users.objects.filter(username=username)
+        for i in user_info:
+            info['pro_leader'] = i.name
+            info['leader_phone'] = i.phone
+        print(info)
+        for i in pro_middle:
+            print(i.status)
+            if i.status == '1':
+                return render(request, 'submitted_middle.html', {'info': info})
+        return render(request, 'middle.html',
+                      {'info': info})
+    return HttpResponseRedirect('/login')
+
+
+
+def apply(request):
+    if request.COOKIES.get('username', '') != '':
+        # username = request.COOKIES.get('username')
+        # user = Users.objects.filter(username=username)
+        # for i in user:
+        #     pro_name = i.pro_name
+        #     tutor_name = i.tutor_name
+        #     name = i.name
+        #     sex = i.sex
+        #     major = i.major
+        #     phone = i.phone
+        #     email = i.email
+        # return render(request, 'test5.html', {'username': username, 'pro_name': pro_name, 'tutor_name': tutor_name,
+        #                                       'pro_leader': name, 'sex': sex, 'major': major, 'leader_phone': phone,
+        #                                       'leader_email': email})
+        return render(request, 'apply.html')
+    return HttpResponseRedirect('/login')

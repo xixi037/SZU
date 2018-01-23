@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>申请报告</title>
+    <title>结题报告</title>
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/static/js/FileSaver.js"></script>
@@ -25,22 +25,16 @@
         <table id="t1">
             <tbody>
             <tr>
+                <td>项目编号</td>
+                <td><input type="text" name="pro_id" id="pro_id" readonly="true" value={{ pro_id }}></td>
                 <td>项目名称</td>
                 <td><input type="text" name="pro_name" id="pro_name" readonly="true" value={{ pro_name }}></td>
-                <td>选题方式</td>
-                <td>
-                    <select name="pro_way">
-                        <option value="A">从开放实验项目库中选取</option>
-                        <option value="B">项目组成员自主命题</option>
-                        <option value="C">其它</option>
-                    </select>
-                </td>
             </tr>
             <tr>
+                <td>负责人</td>
+                <td><input type="text" name="pro_leader" readonly="true" value={{ pro_leader }}></td>
                 <td>负责人手机号码</td>
                 <td><input type="text" name="leader_phone" readonly="true" value={{ leader_phone }}></td>
-                <td>负责人电子邮箱</td>
-                <td><input type="email" name="leader_email" readonly="true" value={{ leader_email }}></td>
             </tr>
             </tbody>
         </table>

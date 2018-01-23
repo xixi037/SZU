@@ -21,8 +21,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:manage_userlist()">管理用户信息</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:submit_record()">查看提交记录</a>
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="javascript:submit_record()">查看提交记录</a>#}
+{#                </li>#}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        提交记录
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">项目申请</a>
+                        <a class="dropdown-item" href="javascript:submit_record()">中期报告</a>
+                        <a class="dropdown-item" href="#">结题报告</a>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -39,13 +50,11 @@
                     <a class="nav-link" href="#">发送邮件</a>{#"javascript:send_email()"#}
                 </li>
             </ul>
-            {% if username != '' %}
                 <button id="cancel" class="btn btn-outline-primary my-2 my-sm-0">注销</button>
-            {% endif %}
-
         </div>
     </div>
 </nav>
+{% block headline %}{% endblock %}
 {% block content %}{% endblock %}
 <script>
     var home = function () {
