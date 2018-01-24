@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>结题报告</title>
     <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/laydate.js"></script>
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/static/js/FileSaver.js"></script>
     <script type="text/javascript" src="/static/js/jquery.wordexport.js"></script>
@@ -26,169 +27,158 @@
             <tbody>
             <tr>
                 <td>项目编号</td>
-                <td><input type="text" name="pro_id" id="pro_id" readonly="true" value={{ pro_id }}></td>
+                <td><input type="text" name="pro_num" value={{ pro_num }}></td>
                 <td>项目名称</td>
-                <td><input type="text" name="pro_name" id="pro_name" readonly="true" value={{ pro_name }}></td>
+                <td><input type="text" name="pro_name" readonly="true" value={{ pro_name }}></td>
+                <td>立项时间</td>
+                <td><input type="text" name="pro_time" id="time1" value={{ pro_time }}></td>
             </tr>
             <tr>
                 <td>负责人</td>
                 <td><input type="text" name="pro_leader" readonly="true" value={{ pro_leader }}></td>
                 <td>负责人手机号码</td>
                 <td><input type="text" name="leader_phone" readonly="true" value={{ leader_phone }}></td>
+                <td>指导教师</td>
+                <td><input type="text" name="tutor_name" readonly="true" value={{ tutor_id }}></td>
             </tr>
             </tbody>
         </table>
-        | 导师信息：
+        | 负责人信息：
         <table id="t2">
             <tbody>
             <tr>
-                <td>导师姓名</td>
-                <td><input type="text" name="tutor_name" id="tutor_name" readonly="true" value={{ tutor_name }}></td>
-                <td>导师研究专长</td>
-                <td><input type="text" name="tutor_area"></td>
+                <td>学号</td>
+                <td><input type="text" name="leader_id" readonly="true" value={{ leader_id }}></td>
+                <td>民族</td>
+                <td><input type="text" name="leader_ethnicity" value={{ leader_ethnicity }}></td>
+                <td>出生日期</td>
+                <td><input type="text" name="leader_birth" id="time2" value={{ leader_birth }}></td>
             </tr>
             <tr>
-                <td>导师联系电话</td>
-                <td><input type="text" name="tutor_phone"></td>
-                <td>导师电子邮箱</td>
-                <td><input type="email" name="tutor_email"></td>
+                <td>所在单位</td>
+                <td><input type="text" name="leader_units" readonly="true" value={{ leader_units }}></td>
+                <td>通讯地址</td>
+                <td><input type="text" name="leader_address" value={{ leader_address }}></td>
+                <td>电子邮箱</td>
+                <td><input type="email" name="email" readonly="true" value={{ email }}></td>
             </tr>
             </tbody>
         </table>
-        {#    | 项目参与人信息：（请将主要负责人写在第一个）#}
-        {#    <button type="button" id="add">添加</button>#}
         <table id="t3">
-            | 项目参与人信息：（请将主要负责人写在第一个）
-            <button type="button" id="addmem">添加</button>
+            | 项目参与人信息：
             <tbody>
             <tr>
                 <th>姓名</th>
-                <th>性别</th>
                 <th>学号</th>
-                <th>年级</th>
-                <th>研究专长</th>
-                <th>承担工作</th>
                 <th>所在学院</th>
+                <th>专业及班级</th>
+                <th>项目分工</th>
             </tr>
             <tr>
-                <td><input type="text" name="pro_leader" id="pro_leader" readonly="true" value={{ pro_leader }}></td>
-                <td><input type="text" name="leader_sex" readonly="true" value={{ sex }}></td>
-                <td><input type="text" name="leader_stuID" readonly="true" value={{ username }}></td>
-                <td><input type="text" name="leader_grade"></td>
-                <td><input type="text" name="leader_area"></td>
-                <td><input type="text" name="leader_work"></td>
-                <td><input type="text" name="leader_academy" readonly="true" value={{ major }}></td>
+                <td><input type="text" name="leader_name" id="leader_name" readonly="true" value={{ leader_name }}></td>
+                <td><input type="text" name="leader_id" id="leader_id" readonly="true" value={{ leader_id }}></td>
+                <td><input type="text" name="leader_institute" readonly="true" value={{ leader_institute }}></td>
+                <td><input type="text" name="leader__major_class" readonly="true" value={{ leader_major_class }}></td>
+                <td><input type="text" name="leader_job" value={{ leader_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem1_name" value={{ mem1_name }}></td>
+                <td><input type="text" name="mem1_stuID" value={{ mem1_stuID }}></td>
+                <td><input type="text" name="mem1_institute" value={{ mem1_institute }}></td>
+                <td><input type="text" name="mem1_major_class" value={{ mem1_major_class }}></td>
+                <td><input type="text" name="mem1_job" value={{ mem1_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem2_name" value={{ mem2_name }}></td>
+                <td><input type="text" name="mem2_stuID" value={{ mem2_stuID }}></td>
+                <td><input type="text" name="mem2_institute" value={{ mem2_institute }}></td>
+                <td><input type="text" name="mem2_major_class" value={{ mem2_major_class }}></td>
+                <td><input type="text" name="mem2_job" value={{ mem2_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem3_name" value={{ mem3_name }}></td>
+                <td><input type="text" name="mem3_stuID" value={{ mem3_stuID }}></td>
+                <td><input type="text" name="mem3_institute" value={{ mem3_institute }}></td>
+                <td><input type="text" name="mem3_major_class" value={{ mem3_major_class }}></td>
+                <td><input type="text" name="mem3_job" value={{ mem3_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem4_name" value={{ mem4_name }}></td>
+                <td><input type="text" name="mem4_stuID" value={{ mem4_stuID }}></td>
+                <td><input type="text" name="mem4_institute" value={{ mem4_institute }}></td>
+                <td><input type="text" name="mem4_major_class" value={{ mem4_major_class }}></td>
+                <td><input type="text" name="mem4_job" value={{ mem4_job }}></td>
             </tr>
             </tbody>
         </table>
         <div id="d1">
             | 项目具体信息：<br>
-            一、项目申请理由（包括：项目研究背景、现状、研究目的及意义等，不超过800字）<br>
-            <textarea rows="10" cols="150" name="pro_reason" wrap="hard" id="text1">
+            项目实验工作人时数 <input type="text" name="pro_hours" value={{ pro_hours }}><br>
+            （项目实验工作人时数指项目组成员进入实验室开展项目实验工作的总人时数<br>
+            项目实验工作人时数=人数×实验小时数，实验小时数应与各实验室工作记录本中记录相符）<br>
+            项目起止时间
+            <input type="text" name="pro_period" id="time1" value={{ pro_period }}><br>
+            项目完成情况
+            <select name="pro_status">
+                <option value="提前">提前</option>
+                <option value="按时">按时</option>
+                <option value="延期">延期</option>
+            </select><br>
+            开展项目所用实验室 <br>
+            <textarea rows="3" cols="150" name="pro_lab" wrap="hard" id="text1">
         </textarea><br>
-            二、项目研究内容（包括：项目研究内容、基本思路和方法，不超过1000字）<br>
-            <textarea rows="10" cols="150" name="pro_content" wrap="hard" id="text2">
+            本项目使用主要仪器设备及耗材情况 <br>
+            <textarea rows="5" cols="150" name="pro_institution" wrap="hard" id="text2">
         </textarea><br>
-            三、项目创新之处（不超过500字）<br>
-            <textarea rows="8" cols="150" name="pro_innovation" wrap="hard" id="text3">
+            项目总结 <br>
+            <textarea rows="8" cols="150" name="pro_sum" wrap="hard" id="text3">
         </textarea><br>
-            四、项目拟利用资源（包括：实验室、设备、材料、场地等，不超过300字））<br>
-            <textarea rows="4" cols="150" name="pro_source" wrap="hard" id="text4">
-        </textarea><br>
-            <table id="t4">
-                五、项目进度安排
-                <button type="button" id="addprocessing">添加</button>
-                <tbody>
-                <tr>
-                    <th>时间</th>
-                    <th>研究内容</th>
-                    <th>主要负责人</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="pro_time0"></td>
-                    <td><input type="text" name="pro_content0"></td>
-                    <td><input type="text" name="pro_leader0"></td>
-                </tr>
-                </tbody>
-            </table>
-            <table id="t5">
-                六、预期研究成果<br>
-                <tbody>
-                <tr>
-                    <th>最终成果名称</th>
-                    <th>完成时间</th>
-                    <th>成果形式</th>
-                    <th>参加人</th>
-                </tr>
-                <tr>
-                    <td><input type="text" name="pro_achievement"></td>
-                    <td><input type="text" name="pro_endtime"></td>
-                    <td><input type="text" name="pro_form"></td>
-                    <td><input type="text" name="pro_participant"></td>
-                </tr>
-                </tbody>
-            </table>
-            <table id="t6">
-                七、经费预算（以人民币元为单位）<br>
-                <tbody>
-                <tr>
-                    <th>预算支出科目</th>
-                    <th>支出金额（元）</th>
-                    <th>预算依据及理由</th>
-                </tr>
-                <tr>
-                    <td>设备费</td>
-                    <td><input type="text" name="budget_equip_money"></td>
-                    <td><input type="text" name="budget_equip_reason"></td>
-                </tr>
-                <tr>
-                    <td>材料费</td>
-                    <td><input type="text" name="budget_material_money"></td>
-                    <td><input type="text" name="budget_material_reason"></td>
-                </tr>
-                <tr>
-                    <td>小型会议费</td>
-                    <td><input type="text" name="budget_meeting_money"></td>
-                    <td><input type="text" name="budget_meeting_reason"></td>
-                </tr>
-                <tr>
-                    <td>印刷、版面、专利申请费</td>
-                    <td><input type="text" name="budget_apply_money"></td>
-                    <td><input type="text" name="budget_apply_reason"></td>
-                </tr>
-                <tr>
-                    <td>图书、资料费</td>
-                    <td><input type="text" name="budget_books_money"></td>
-                    <td><input type="text" name="budget_books_reason"></td>
-                </tr>
-                <tr>
-                    <td>交通、差旅费</td>
-                    <td><input type="text" name="budget_trans_money"></td>
-                    <td><input type="text" name="budget_trans_reason"></td>
-                </tr>
-                <tr>
-                    <td>劳务、咨询费</td>
-                    <td><input type="text" name="budget_service_money"></td>
-                    <td><input type="text" name="budget_service_reason"></td>
-                </tr>
-                <tr>
-                    <td>其他经费</td>
-                    <td><input type="text" name="budget_other_money"></td>
-                    <td><input type="text" name="budget_other_reason"></td>
-                </tr>
-                <tr>
-                    <td>合计</td>
-                    <td colspan="2"><input type="text" name="budget_total_money"></td>
-                </tr>
-                </tbody>
-            </table>
         </div>
-
+        | 经费决算表
+        <table id="t4">
+            <tbody>
+            <tr>
+                <th>项目</th>
+                <th>金额（元）</th>
+                <th>备注</th>
+            </tr>
+            <tr>
+                <td>经费收入</td>
+                <td><input type="text" name="money_in"></td>
+                <td><input type="text" name="money_in_remark"></td>
+            </tr>
+            <tr>
+                <td>实验耗材费</td>
+                <td><input type="text" name="money_consume"></td>
+                <td><input type="text" name="money_consume_remark"></td>
+            </tr>
+            <tr>
+                <td>指导老师实验津贴费</td>
+                <td><input type="text" name="money_allowance"></td>
+                <td><input type="text" name="money_allowance_remark"></td>
+            </tr>
+            <tr>
+                <td>其他</td>
+                <td><input type="text" name="money_other"></td>
+                <td><input type="text" name="money_other_remark"></td>
+            </tr>
+            <tr>
+                <td>合计</td>
+                <td><input type="text" name="money_total"></td>
+                <td><input type="text" name="money_total_remark"></td>
+            </tr>
+            <tr>
+                <td>经费结余</td>
+                <td><input type="text" name="money_rest"></td>
+                <td><input type="text" name="money_rest_remark"></td>
+            </tr>
+            </tbody>
+        </table>
 
     </form>
+    <button type="button" id="save">保存</button>
     <button type="button" id="sub">提交</button>
-    {#<button type="button" id="exportword">导出word</button>#}
-    <section id="model_section" class="container"></section>
+    <button type="button" id="close">关闭</button>
 </div>
 <script>
     $(document).ready(function () {
@@ -198,58 +188,74 @@
         var nameCount = 1;
         var processingCount = 1;
         var s;
-        $('#addmem').click(function () {
-            if (nameCount < 4) {
-                s = nameCount.toString();
-                $('#t3 tr').eq(-1).after('<tr>' +
-                    '            <td><input type="text" name="name_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="sex_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="stuID_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="grade_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="area_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="work_mem' + s + '"></td>\n' +
-                    '            <td><input type="text" name="academy_mem' + s + '"></td>' +
-                    '        </tr>');
-                nameCount++;
-            }
+        laydate.render({
+            elem: '#time1' //指定元素
         });
-        $('#addprocessing').click(function () {
-            if (processingCount < 7) {
-                s = processingCount.toString();
-                $('#t4 tr').eq(-1).after('<tr>' +
-                    '            <td><input type="text" name="pro_time' + s + '"></td>\n' +
-                    '            <td><input type="text" name="pro_content' + s + '"></td>\n' +
-                    '            <td><input type="text" name="pro_leader' + s + '"></td>\n' +
-                    '        </tr>');
-                processingCount++;
-            }
+        laydate.render({
+            elem: '#time2' //指定元素
         });
-        $('#sub').click(function () {
+        $('#save').click(function () {
             var data = $('#info').serializeArray();
             console.log(data);
             $.ajax({
-                {#                url:'/wordmodel',#}
-                url: '/apply_operation',
+                url: '/conclude_save',
                 data: {
                     'info': JSON.stringify(data)
                 },
                 type: 'POST',
                 success: function (data) {
-                    console.log(data);
-                    window.location.href = '/success?url=' + data;
-                    {#                    $('#model_section').html(data);#}
+                    alert('保存成功！');
                 },
                 error: function (data) {
                     console.log(data);
                 }
             })
         });
-        {#        $('#exportword').click(function(){#}
-        {#            var tutor_name = $('#tutor_name').val();#}
-        {#            var pro_leader = $('#pro_leader').val();#}
-        {#            var pro_name = $('#pro_name').val();#}
-        {#            $('#model_section').wordExport('申请书_'+tutor_name+'_'+pro_leader+'_'+pro_name);#}
-        {#        })#}
+        $('#sub').click(function () {
+            var flag = 1;
+            for (var i = 0; i < $('#info input').length; i++) {
+                if ($.trim($('#info input')[i].value) == "") {
+                    alert('需要全部填写，若没有则写"无"');
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                for (i = 0; i < $('#info textarea').length; i++) {
+                    if ($.trim($('#info textarea')[i].value) == "") {
+                        alert('需要全部填写，若没有则写"无"');
+                        flag = 0;
+                        break;
+                    }
+                }
+                if (flag == 1) {
+                    $('#status').val('1');
+                    var data = $('#info').serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: '/conclude_save',
+                        data: {
+                            'info': JSON.stringify(data)
+                        },
+                        type: 'POST',
+                        success: function (data) {
+                            console.log(data);
+                            alert('提交成功！');
+                            window.location.href = '/base';
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    })
+
+                }
+            }
+
+
+        });
+        $('#close').click(function () {
+            window.location.href = '/base'
+        });
     });
 
 </script>

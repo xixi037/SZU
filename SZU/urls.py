@@ -49,8 +49,10 @@ urlpatterns = [
                   # url(r'^apply_save', reports.save_apply),
                   url(r'^middle$', views.middle),
                   url(r'^middle_model$', views.middle_model),
-                  url(r'^middle_save', reports.save_middle),
-                  url(r'^conclusion_model$', views.conclusion_model),
+                  url(r'^middle_save$', reports.save_middle),
+                  url(r'^conclude$',views.conclude),
+                  url(r'^conclude_model$', views.conclude_model),
+                  url(r'^conclude_save$', reports.save_conclude),
 
                   url(r'^success', views.success),
                   url(r'^downloadfile', views.downloadFile),

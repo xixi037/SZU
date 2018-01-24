@@ -151,7 +151,6 @@
                     var data = $('#info').serializeArray();
                     console.log(data);
                     $.ajax({
-                        url: '/wordmodel',
                         url: '/middle_save',
                         data: {
                             'info': JSON.stringify(data)

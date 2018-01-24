@@ -53,6 +53,7 @@ class Users(models.Model):
     sex = models.CharField(max_length=255, blank=True, null=True)
     classID = models.CharField(max_length=255, blank=True, null=True)  # Field name made lowercase.
     major = models.CharField(max_length=255, blank=True, null=True)
+    institute = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True, default='')
     email = models.CharField(max_length=255, blank=True, null=True, default='')
 
@@ -77,6 +78,59 @@ class Status(models.Model):
         db_table = 'status'
 
 
+class Conclude(models.Model):
+    pro_id = models.IntegerField(primary_key=True)
+    status = models.CharField(max_length=1, blank=True, null=True, default='')
+    pro_num = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_id = models.CharField(max_length=255, blank=True, null=True)
+    pro_time = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_ethnicity = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_birth = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_address = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_institute = models.CharField(max_length=255, blank=True, null=True, default='')
+    leader_job = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem1_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem1_stuid = models.CharField(db_column='mem1_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem1_institute = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem1_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem1_job = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem2_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem2_stuid = models.CharField(db_column='mem2_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem2_institute = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem2_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem2_job = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem3_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem3_stuid = models.CharField(db_column='mem3_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem3_institute = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem3_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem3_job = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem4_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem4_stuid = models.CharField(db_column='mem4_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem4_institute = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem4_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
+    mem4_job = models.CharField(max_length=255, blank=True, null=True, default='')
+    pro_lab = models.TextField(blank=True, null=True)
+    pro_instrument = models.TextField(blank=True, null=True)
+    pro_hours = models.CharField(max_length=255, blank=True, null=True, default='')
+    pro_period = models.CharField(max_length=255, blank=True, null=True, default='')
+    pro_status = models.CharField(max_length=255, blank=True, null=True, default='')
+    pro_sum = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_in = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_in_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_consume = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_consume_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_allowance = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_allowance_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_other = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_other_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_total = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_total_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_rest = models.CharField(max_length=255, blank=True, null=True, default='')
+    money_rest_remark = models.CharField(max_length=255, blank=True, null=True, default='')
+
+    class Meta:
+        managed = False
+        db_table = 'conclude'
 
 
 

@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 
-from Innovation.models import Middle, ProInfo
+from Innovation.models import Middle, ProInfo, Conclude
 
 
 def todict(source):
@@ -52,6 +52,107 @@ def save_middle(request):
                                       pro_difficulties=pro_difficulties,
                                       pro_advice=pro_advice, pro_change=pro_change, pro_plan=pro_plan,
                                       pro_harvest=pro_harvest, status=status)
+            else:
+                return HttpResponseRedirect('404.html')
+
+        print('填写完毕')
+    return HttpResponseRedirect('/middle')
+
+
+
+def save_conclude(request):
+    if request.POST.get('info', '') != '':
+        info = eval(request.POST.get('info'))
+        info = todict(info)
+        pro_num = info.get('pro_num', '')
+        pro_time = info.get('pro_time', '')
+        leader_id = info.get('leader_id', '')
+        leader_ethnicity = info.get('leader_ethnicity', '')
+        leader_birth = info.get('leader_birth', '')
+        leader_address = info.get('leader_address', '')
+        leader_institute = info.get('leader_institute', '')
+        leader_job = info.get('leader_job', '')
+        mem1_name = info.get('mem1_name', '')
+        mem1_stuID = info.get('mem1_stuID', '')
+        mem1_institute = info.get('mem1_institute', '')
+        mem1_major_class = info.get('mem1_major_class', '')
+        mem1_job = info.get('mem1_job', '')
+        mem2_name = info.get('mem2_name', '')
+        mem2_stuID = info.get('mem2_stuID', '')
+        mem2_institute = info.get('mem2_institute','')
+        mem2_major_class = info.get('mem2_major_class', '')
+        mem2_job = info.get('mem2_job', '')
+        mem3_name = info.get('mem3_name', '')
+        mem3_stuID = info.get('mem3_stuID', '')
+        mem3_institute = info.get('mem3_institute', '')
+        mem3_major_class = info.get('mem3_major_class', '')
+        mem3_job = info.get('mem3_job', '')
+        mem4_name = info.get('mem4_name', '')
+        mem4_stuID = info.get('mem4_stuID', '')
+        mem4_institute = info.get('mem4_institute', '')
+        mem4_major_class = info.get('mem4_major_class', '')
+        mem4_job = info.get('mem4_job', '')
+        pro_lab = info.get('pro_lab', '')
+        pro_instrument = info.get('pro_instrument', '')
+        pro_hours = info.get('pro_hours', '')
+        pro_period = info.get('pro_period', '')
+        pro_status = info.get('pro_status', '')
+        pro_sum = info.get('pro_sum', '')
+        money_in = info.get('money_in', '')
+        money_in_remark = info.get('money_in_remark', '')
+        money_consume = info.get('money_consume', '')
+        money_consume_remark = info.get('money_consume_remark', '')
+        money_allowance = info.get('money_allowance', '')
+        money_allowance_remark = info.get('money_allowance_remark', '')
+        money_other = info.get('money_other', '')
+        money_other_remark = info.get('money_other_remark', '')
+        money_total = info.get('money_total', '')
+        money_total_remark = info.get('money_total_remark', '')
+        money_rest = info.get('money_rest', '')
+        money_rest_remark = info.get('money_rest_remark', '')
+
+        if Conclude.objects.filter(leader_id=leader_id):
+            Middle.objects.filter(leader_id=leader_id).update(pro_num=pro_num, pro_mems=pro_time,
+                                                              leader_ethnicity=leader_ethnicity, leader_birth=leader_birth,
+                                                              leader_address=leader_address, leader_institute=leader_institute,
+                                                              leader_job=leader_job,mem1_name=mem1_name, mem1_stuID=mem1_stuID,
+                                                              mem1_institute=mem1_institute, mem1_major_class=mem1_major_class,
+                                                              mem1_job=mem1_job,mem2_name=mem2_name,mem2_stuID=mem2_stuID,
+                                                              mem2_institute=mem2_institute,mem2_major_class=mem2_major_class,
+                                                              mem2_job=mem2_job,mem3_name=mem3_name,mem3_stuID=mem3_stuID,
+                                                              mem3_institute=mem3_institute,mem3_major_class=mem3_major_class,
+                                                              mem3_job=mem3_job,mem4_name=mem4_name,mem4_stuID=mem4_stuID,
+                                                              mem4_institute=mem4_institute,mem4_major_class=mem4_major_class,
+                                                              mem4_job=mem4_job,pro_lab=pro_lab,pro_instrument=pro_instrument,
+                                                              pro_hours=pro_hours,pro_period=pro_period,pro_status=pro_status,
+                                                              pro_sum=pro_sum,money_in=money_in,money_in_remark=money_in_remark,
+                                                              money_consume=money_consume,money_consume_remark=money_consume_remark,
+                                                              money_allowance=money_allowance,money_allowance_remark=money_allowance_remark,
+                                                              money_other=money_other,money_other_remark=money_other_remark,money_total=money_total,
+                                                              money_total_remark=money_total_remark,money_rest=money_rest,money_rest_remark=money_rest_remark)
+        else:
+            if ProInfo.objects.filter(leader_id=leader_id):
+                pro_object = ProInfo.objects.filter(leader_id=leader_id)
+                for i in pro_object:
+                    pro_id = i.id
+                Middle.objects.create(pro_id=pro_id,pro_num=pro_num, pro_mems=pro_time,leader_id=leader_id,
+                                      leader_ethnicity=leader_ethnicity, leader_birth=leader_birth,
+                                      leader_address=leader_address, leader_institute=leader_institute,
+                                      leader_job=leader_job,mem1_name=mem1_name, mem1_stuID=mem1_stuID,
+                                      mem1_institute=mem1_institute, mem1_major_class=mem1_major_class,
+                                      mem1_job=mem1_job,mem2_name=mem2_name,mem2_stuID=mem2_stuID,
+                                      mem2_institute=mem2_institute,mem2_major_class=mem2_major_class,
+                                      mem2_job=mem2_job,mem3_name=mem3_name,mem3_stuID=mem3_stuID,
+                                      mem3_institute=mem3_institute,mem3_major_class=mem3_major_class,
+                                      mem3_job=mem3_job,mem4_name=mem4_name,mem4_stuID=mem4_stuID,
+                                      mem4_institute=mem4_institute,mem4_major_class=mem4_major_class,
+                                      mem4_job=mem4_job,pro_lab=pro_lab,pro_instrument=pro_instrument,
+                                      pro_hours=pro_hours,pro_period=pro_period,pro_status=pro_status,
+                                      pro_sum=pro_sum,money_in=money_in,money_in_remark=money_in_remark,
+                                      money_consume=money_consume,money_consume_remark=money_consume_remark,
+                                      money_allowance=money_allowance,money_allowance_remark=money_allowance_remark,
+                                      money_other=money_other,money_other_remark=money_other_remark,money_total=money_total,
+                                      money_total_remark=money_total_remark,money_rest=money_rest,money_rest_remark=money_rest_remark)
             else:
                 return HttpResponseRedirect('404.html')
 

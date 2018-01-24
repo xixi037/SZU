@@ -104,16 +104,17 @@ def save_user(request):
         name = request.GET['name']
         sex = request.GET['sex']
         major = request.GET['major']
+        institute = request.GET['institute']
         classID = request.GET['classID']
         pageIndex = request.GET.get('pageIndex','1')
         record = Users.objects.filter(username=stuID)
 
         if not record:
             print('不存在')
-            Users.objects.create(username=stuID, password=stuID[-6:], name=name, sex=sex,major=major,classID=classID)
+            Users.objects.create(username=stuID, password=stuID[-6:], name=name, sex=sex,major=major,institute=institute,classID=classID)
         else:
             print('已存在')
-            Users.objects.filter(username=stuID).update(name=name,sex=sex,major=major,classID=classID)
+            Users.objects.filter(username=stuID).update(name=name,sex=sex,major=major,institute=institute,classID=classID)
     return HttpResponseRedirect('/admin/base/userlist?pageIndex='+str(pageIndex))
 
 def del_name(request):
@@ -137,16 +138,17 @@ def add_name(request):
         name = request.GET['name']
         sex = request.GET['sex']
         major = request.GET['major']
+        institute = request.GET['institute']
         classID = request.GET['classID']
         pageIndex = request.GET.get('pageIndex', '1')
         record = Users.objects.filter(username=stuID)
         if not record:
             print('不存在')
             Users.objects.create(username=stuID, password=stuID[-6:], name=name, sex=sex,
-                                 major=major,classID=classID)
+                                 major=major,institute = institute,classID=classID)
         else:
             print('已存在')
-            Users.objects.filter(username=stuID).update(name=name, sex=sex, major=major, classID=classID)
+            Users.objects.filter(username=stuID).update(name=name, sex=sex, major=major, institute = institute,classID=classID)
 
     return HttpResponseRedirect('/admin/base/userlist?pageIndex='+str(pageIndex))
 
@@ -183,7 +185,8 @@ def getfile(request):
                 name = ws['B' + str(index)].value.strip()
                 sex = ws['C' + str(index)].value.strip()
                 major = ws['D' + str(index)].value.strip()
-                classID = str(ws['E' + str(index)].value).strip()
+                institute = str(ws['E' + str(index)].value).strip()
+                classID = str(ws['F' + str(index)].value).strip()
                 print(username)
                 print(name)
                 print(sex)
@@ -193,7 +196,7 @@ def getfile(request):
                     print('已经有了这个用户')
                     pass
                 else:
-                    Users.objects.create(username=username,password=password,name=name,sex=sex,major=major,classID=classID)
+                    Users.objects.create(username=username,password=password,name=name,sex=sex,major=major,institute=institute,classID=classID)
 
         else:
             return HttpResponse('上传文件格式有误！')

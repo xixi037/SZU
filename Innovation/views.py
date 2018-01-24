@@ -10,7 +10,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse, JsonResponse
 from django.shortcuts import render
 
-from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status
+from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status, Conclude
+
 
 def nav_status(request):
     status = Status.objects.all()[0]
@@ -385,7 +386,7 @@ def middle_model(request):
     return HttpResponseRedirect('/login')
 
 
-def conclusion_model(request):
+def conclude_model(request):
     if request.COOKIES.get('username', '') != '':
         username = request.COOKIES.get('username')
         user_info = ProInfo.objects.filter(leader_id=username)
@@ -423,7 +424,6 @@ def infostore(request):
         print('建立中期报告数据库')
         print(pro_id)
         Middle.objects.create(pro_id=pro_id, leader_id=username)
-    if not
     return HttpResponse('success')
 
 def middle(request):
@@ -478,3 +478,35 @@ def apply(request):
         #                                       'leader_email': email})
         return render(request, 'apply.html')
     return HttpResponseRedirect('/login')
+
+def conclude(request):
+    username = request.COOKIES.get('username')
+    pro_conclude = Conclude.objects.filter(leader_id=username)
+    for i in pro_conclude:
+        info = model_to_dict(i)
+        pro_id = i.pro_id
+    print('项目id' + str(pro_id))
+    pro_info = ProInfo.objects.filter(id=pro_id)
+    for i in pro_info:
+        info['pro_name'] = i.pro_name
+        info['tutor_id'] = i.tutor_id
+        id = i.id
+    # mem_info = Members.objects.filter(pro_id=id)
+    # memlist = []
+    # for i in mem_info:
+    #     memlist.append(i.stu_id)
+    # info["pro_mems"] = '/'.join(memlist)
+    info['leader_id'] = username
+    info['leader_units'] = "深圳大学"
+    user_info = Users.objects.filter(username=username)
+    for i in user_info:
+        info['pro_leader'] = i.name
+        info['leader_phone'] = i.phone
+        info['email'] = i.email
+    # print(info)
+    for i in pro_conclude:
+        print(i.status)
+        if i.status == '1':
+            return render(request, 'submitted_middle.html', {'info': info})
+    return render(request, 'conclude.html',
+                  {'info': info})

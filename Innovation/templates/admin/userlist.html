@@ -20,6 +20,7 @@
                     <td><input type="hidden" class="add" placeholder="姓名" name="name"></td>
                     <td><input type="hidden" class="add" placeholder="性别" name="sex"></td>
                     <td><input type="hidden" class="add" placeholder="专业" name="major"></td>
+                    <td><input type="hidden" class="add" placeholder="学院" name="institute"></td>
                     <td><input type="hidden" class="add" placeholder="班级" name="classID"></td>
                 </tr>
             </table>
@@ -38,6 +39,7 @@
                         <th>姓名</th>
                         <th>性别</th>
                         <th>专业</th>
+                        <th>学院</th>
                         <th>班级</th>
                         <th>编辑</th>
                         <th>删除</th>
@@ -50,6 +52,7 @@
                             <td><span>{{ i.name }}</span></td>
                             <td><span>{{ i.sex }}</span></td>
                             <td><span>{{ i.major }}</span></td>
+                            <td><span>{{ i.institute }}</span></td>
                             <td><span>{{ i.classID }}</span></td>
                             <td id="editline"><a href="javascript:clickEdit({{ forloop.counter }})" class="edit"
                                                  id="edit{{ forloop.counter }}">编辑</a></td>
@@ -167,7 +170,7 @@
             var elem = '#edit' + index.toString();
             var e_length = $(elem).parent().parent().find('span').length;
             var e_value;
-            var attrlist = ['forloop', 'stuID', 'name', 'sex', 'major', 'classID'];
+            var attrlist = ['forloop', 'stuID', 'name', 'sex', 'major', 'institute','classID'];
             for (i = 1; i < e_length; i++) {
                 e_value = $(elem).parent().parent().find('span')[i].innerHTML;
                 $(elem).parent().parent().find('span')[i].innerHTML = '<input type="txt" class="t" name=' + attrlist[i] + ' value="' + e_value + '">';
