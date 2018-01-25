@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结题报告</title>
+    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/laydate.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/FileSaver.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.wordexport.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            word-break: break-all;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form id="info">
+        {#    {% csrf_token %}#}
+        | 基本信息：
+        <table id="t1">
+            <tbody>
+            <tr>
+                <td>项目编号</td>
+                <td><input type="text" name="pro_num" readonly value={{ info.pro_num }}></td>
+                <td>项目名称</td>
+                <td><input type="text" name="pro_name" readonly="true" value={{ info.pro_name }}></td>
+                <td>立项时间</td>
+                <td><input type="text" name="pro_time" id="time1" readonly value={{ info.pro_time }}></td>
+            </tr>
+            <tr>
+                <td>负责人</td>
+                <td><input type="text" name="pro_leader" readonly="true" value={{ info.pro_leader }}></td>
+                <td>负责人手机号码</td>
+                <td><input type="text" name="leader_phone" readonly="true" value={{ info.leader_phone }}></td>
+                <td>指导教师</td>
+                <td><input type="text" name="tutor_name" readonly="true" value={{ info.tutor_id }}></td>
+            </tr>
+            </tbody>
+        </table>
+        | 负责人信息：
+        <table id="t2">
+            <tbody>
+            <tr>
+                <td>学号</td>
+                <td><input type="text" name="leader_id" readonly="true" value={{ info.leader_id }}></td>
+                <td>民族</td>
+                <td><input type="text" name="leader_ethnicity" readonly value={{ info.leader_ethnicity }}></td>
+                <td>出生日期</td>
+                <td><input type="text" name="leader_birth" id="time2" readonly value={{ info.leader_birth }}></td>
+            </tr>
+            <tr>
+                <td>所在单位</td>
+                <td><input type="text" name="leader_units" readonly="true" value={{ info.leader_units }}></td>
+                <td>通讯地址</td>
+                <td><input type="text" name="leader_address" readonly value={{ info.leader_address }}></td>
+                <td>电子邮箱</td>
+                <td><input type="email" name="email" readonly="true" value={{ info.email }}></td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="t3">
+            | 项目参与人信息：
+            <tbody>
+            <tr>
+                <th>姓名</th>
+                <th>学号</th>
+                <th>所在学院</th>
+                <th>专业及班级</th>
+                <th>项目分工</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="leader_name" id="leader_name" readonly="true" value={{ info.pro_leader }}>
+                </td>
+                <td><input type="text" name="leader_id" id="leader_id" readonly="true" value={{ info.leader_id }}></td>
+                <td><input type="text" name="leader_institute" readonly="true" value={{ info.leader_institute }}></td>
+                <td><input type="text" name="leader__major_class" readonly="true" value={{ info.leader_major_class }}>
+                </td>
+                <td><input type="text" name="leader_job" readonly value={{ info.leader_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem1_name" readonly value={{ info.mem1_name }}></td>
+                <td><input type="text" name="mem1_stuID" readonly value={{ info.mem1_stuID }}></td>
+                <td><input type="text" name="mem1_institute" readonly value={{ info.mem1_institute }}></td>
+                <td><input type="text" name="mem1_major_class" readonly value={{ info.mem1_major_class }}></td>
+                <td><input type="text" name="mem1_job" readonly value={{ info.mem1_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem2_name" readonly value={{ info.mem2_name }}></td>
+                <td><input type="text" name="mem2_stuID" readonly value={{ info.mem2_stuID }}></td>
+                <td><input type="text" name="mem2_institute" readonly value={{ info.mem2_institute }}></td>
+                <td><input type="text" name="mem2_major_class" readonly value={{ info.mem2_major_class }}></td>
+                <td><input type="text" name="mem2_job" readonly value={{ info.mem2_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem3_name" readonly value={{ info.mem3_name }}></td>
+                <td><input type="text" name="mem3_stuID" readonly value={{ info.mem3_stuID }}></td>
+                <td><input type="text" name="mem3_institute" readonly value={{ info.mem3_institute }}></td>
+                <td><input type="text" name="mem3_major_class" readonly value={{ info.mem3_major_class }}></td>
+                <td><input type="text" name="mem3_job" readonly value={{ info.mem3_job }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem4_name" readonly value={{ info.mem4_name }}></td>
+                <td><input type="text" name="mem4_stuID" readonly value={{ info.mem4_stuID }}></td>
+                <td><input type="text" name="mem4_institute" readonly value={{ info.mem4_institute }}></td>
+                <td><input type="text" name="mem4_major_class" readonly value={{ info.mem4_major_class }}></td>
+                <td><input type="text" name="mem4_job" readonly value={{ info.mem4_job }}></td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="d1">
+            | 项目具体信息：<br>
+            项目实验工作人时数 <input type="text" name="pro_hours" readonly value={{ info.pro_hours }}><br>
+            （项目实验工作人时数指项目组成员进入实验室开展项目实验工作的总人时数<br>
+            项目实验工作人时数=人数×实验小时数，实验小时数应与各实验室工作记录本中记录相符）<br>
+            项目起止时间
+            <input type="text" name="pro_period" id="time1" readonly value={{ info.pro_period }}><br>
+            项目完成情况
+            <select name="pro_status" disabled="disabled" id="pro_status">
+                <option value="">--</option>
+                <option value="提前">提前</option>
+                <option value="按时">按时</option>
+                <option value="延期">延期</option>
+            </select><br>
+            开展项目所用实验室 <br>
+            <textarea rows="3" cols="150" name="pro_lab" wrap="hard" readonly id="text1">{{ info.pro_lab }}
+        </textarea><br>
+            本项目使用主要仪器设备及耗材情况 <br>
+            <textarea rows="5" cols="150" name="pro_institution" wrap="hard" readonly
+                      id="text2">{{ info.pro_instrument }}
+        </textarea><br>
+            项目总结 <br>
+            <textarea rows="8" cols="150" name="pro_sum" wrap="hard" readonly id="text3">{{ info.pro_sum }}
+        </textarea><br>
+        </div>
+        | 经费决算表
+        <table id="t4">
+            <tbody>
+            <tr>
+                <th>项目</th>
+                <th>金额（元）</th>
+                <th>备注</th>
+            </tr>
+            <tr>
+                <td>经费收入</td>
+                <td><input type="text" readonly name="money_in" value={{ info.money_in }}></td>
+                <td><input type="text" readonly name="money_in_remark" value={{ info.money_in_remark }}></td>
+            </tr>
+            <tr>
+                <td>实验耗材费</td>
+                <td><input type="text" readonly name="money_consume" value={{ info.money_consume }}></td>
+                <td><input type="text" readonly name="money_consume_remark" value={{ info.money_consume_remark }}></td>
+            </tr>
+            <tr>
+                <td>指导老师实验津贴费</td>
+                <td><input type="text" readonly name="money_allowance" value={{ info.money_allowance }}></td>
+                <td><input type="text" readonly name="money_allowance_remark" value={{ info.money_allowance_remark }}>
+                </td>
+            </tr>
+            <tr>
+                <td>其他</td>
+                <td><input type="text" readonly name="money_other" value={{ info.money_other }}></td>
+                <td><input type="text" readonly name="money_other_remark" value={{ info.money_other_remark }}></td>
+            </tr>
+            <tr>
+                <td>合计</td>
+                <td><input type="text" readonly name="money_total" value={{ info.money_total }}></td>
+                <td><input type="text" readonly name="money_total_remark" value={{ info.money_total_remark }}></td>
+            </tr>
+            <tr>
+                <td>经费结余</td>
+                <td><input type="text" readonly name="money_rest" value={{ info.money_rest }}></td>
+                <td><input type="text" readonly name="money_rest_remark" value={{ info.money_rest_remark }}></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+    <button type="button" id="close">关闭</button>
+</div>
+<script>
+    $(document).ready(function () {
+        var status = "{{ info.pro_status }}"
+        $('#pro_status').val(status);
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+        $('#close').click(function () {
+            window.location.href = '/base'
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}上传文档{% endblock %}
+{% block content %}
+
+    <form enctype="multipart/form-data" action="/upload/file_conclude" method="post" id="experiment">
+    {% csrf_token %}
+    <input type="file" accept="application/msword" name="file">
+    <input type="submit" value="提交">
+</form>
+{% endblock %}

@@ -31,8 +31,8 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="#">项目申请</a>
-                        <a class="dropdown-item" href="javascript:submit_record()">中期报告</a>
-                        <a class="dropdown-item" href="#">结题报告</a>
+                        <a class="dropdown-item" href="javascript:middle_record()">中期报告</a>
+                        <a class="dropdown-item" href="javascript:conclude_record()">结题报告</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -63,8 +63,11 @@
     var manage_userlist = function () {
         window.location.href = "/admin/base/userlist";
     };
-    var submit_record = function () {
-        window.location.href = "/admin/base/infolist";
+    var middle_record = function () {
+        window.location.href = "/admin/base/middle_infolist";
+    };
+    var conclude_record = function () {
+        window.location.href = "/admin/base/conclude_infolist";
     };
     var change_mode = function () {
         window.location.href = "/admin/base/status";
@@ -90,5 +93,6 @@
         });
     });
 </script>
+{% block script %}{% endblock %}
 </body>
 </html>

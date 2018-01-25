@@ -10,7 +10,7 @@ from django.shortcuts import render
 import time
 
 from Innovation.exportword import write_to_middle
-from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status
+from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status, Conclude
 
 
 def admin_base(request):
@@ -44,28 +44,22 @@ def admin_welcome(request):
         return render(request, 'admin/admin_welcome.html', {'username':username})
     return HttpResponseRedirect('/admin/login')
 
-def manage_info(request):
-    status = Status.objects.all()[0]
-    status = status.mode
+def manage_middle_info(request):
     infolist = []
-    if status == 1:
-        pass
-        # infolist = Middle.objects.filter(status=1)
-    elif status == 2:
-        prolist = Middle.objects.filter(status=1)
-        for i in prolist:
-            id=i.pro_id
-            records = ProInfo.objects.filter(id=id)
-            for k in records:
-                dict = model_to_dict(k)
-                # infolist.append(i)
-                leader_id = k.leader_id
-                user = Users.objects.filter(username=leader_id)
-                for j in user:
-                    name = j.name
-                dict['name']=name
-                dict['export_time'] = i.export_time
-                infolist.append(dict)
+    prolist = Middle.objects.filter(status=1)
+    for i in prolist:
+        id=i.pro_id
+        records = ProInfo.objects.filter(id=id)
+        for k in records:
+            dict = model_to_dict(k)
+            # infolist.append(i)
+            leader_id = k.leader_id
+            user = Users.objects.filter(username=leader_id)
+            for j in user:
+                name = j.name
+            dict['name']=name
+            dict['export_time'] = i.export_time
+            infolist.append(dict)
     print(infolist)
     count = len(infolist)
     print('列表长度：'+str(count))
@@ -75,6 +69,33 @@ def manage_info(request):
     info = infolist[(pageIndex - 1) * 20:20 * pageIndex]
 
     return render(request, 'admin/infolist.html', {'infolist':info, 'pageIndex':pageIndex, 'count':count, 'page':page})
+
+def manage_conclude_info(request):
+    infolist = []
+    prolist = Conclude.objects.filter(status=1)
+    for i in prolist:
+        id=i.pro_id
+        records = ProInfo.objects.filter(id=id)
+        for k in records:
+            dict = model_to_dict(k)
+            # infolist.append(i)
+            leader_id = k.leader_id
+            user = Users.objects.filter(username=leader_id)
+            for j in user:
+                name = j.name
+            dict['name']=name
+            dict['export_time'] = i.export_time
+            infolist.append(dict)
+    print(infolist)
+    count = len(infolist)
+    print('列表长度：'+str(count))
+    page = int(math.ceil(count / 20))
+    pageIndex = int(request.GET.get('pageIndex', 1))
+    print(pageIndex)
+    info = infolist[(pageIndex - 1) * 20:20 * pageIndex]
+
+    return render(request, 'admin/infolist_conclude.html', {'infolist':info, 'pageIndex':pageIndex, 'count':count, 'page':page})
+
 
 def manage_user(request):
     alluser = Users.objects.all()
@@ -208,7 +229,7 @@ def change_mode(request):
     if request.GET.get('status'):
         status = int(request.GET.get('status'))
         Status.objects.all().update(mode=status)
-        return render(request, 'migrations/status.html', {'status': status})
+        return render(request, 'admin/status.html', {'status': status})
     return HttpResponseRedirect('404.html')
 
 def change_date(request):

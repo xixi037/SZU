@@ -61,6 +61,7 @@ def save_middle(request):
 
 
 def save_conclude(request):
+    print('保存结题报告啦')
     if request.POST.get('info', '') != '':
         info = eval(request.POST.get('info'))
         info = todict(info)
@@ -110,9 +111,10 @@ def save_conclude(request):
         money_total_remark = info.get('money_total_remark', '')
         money_rest = info.get('money_rest', '')
         money_rest_remark = info.get('money_rest_remark', '')
+        status = info.get('status')
 
         if Conclude.objects.filter(leader_id=leader_id):
-            Middle.objects.filter(leader_id=leader_id).update(pro_num=pro_num, pro_mems=pro_time,
+            Conclude.objects.filter(leader_id=leader_id).update(pro_num=pro_num, pro_time=pro_time,status=status,
                                                               leader_ethnicity=leader_ethnicity, leader_birth=leader_birth,
                                                               leader_address=leader_address, leader_institute=leader_institute,
                                                               leader_job=leader_job,mem1_name=mem1_name, mem1_stuID=mem1_stuID,
@@ -135,8 +137,8 @@ def save_conclude(request):
                 pro_object = ProInfo.objects.filter(leader_id=leader_id)
                 for i in pro_object:
                     pro_id = i.id
-                Middle.objects.create(pro_id=pro_id,pro_num=pro_num, pro_mems=pro_time,leader_id=leader_id,
-                                      leader_ethnicity=leader_ethnicity, leader_birth=leader_birth,
+                    Conclude.objects.create(pro_id=pro_id,pro_num=pro_num, pro_time=pro_time,leader_id=leader_id,
+                                      leader_ethnicity=leader_ethnicity, leader_birth=leader_birth,status=status,
                                       leader_address=leader_address, leader_institute=leader_institute,
                                       leader_job=leader_job,mem1_name=mem1_name, mem1_stuID=mem1_stuID,
                                       mem1_institute=mem1_institute, mem1_major_class=mem1_major_class,
@@ -157,6 +159,6 @@ def save_conclude(request):
                 return HttpResponseRedirect('404.html')
 
         print('填写完毕')
-    return HttpResponseRedirect('/middle')
+    return HttpResponseRedirect('/conclude')
 
 

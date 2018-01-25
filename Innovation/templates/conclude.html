@@ -27,19 +27,19 @@
             <tbody>
             <tr>
                 <td>项目编号</td>
-                <td><input type="text" name="pro_num" value={{ pro_num }}></td>
+                <td><input type="text" name="pro_num" value={{ info.pro_num }}></td>
                 <td>项目名称</td>
-                <td><input type="text" name="pro_name" readonly="true" value={{ pro_name }}></td>
+                <td><input type="text" name="pro_name" readonly="true" value={{ info.pro_name }}></td>
                 <td>立项时间</td>
-                <td><input type="text" name="pro_time" id="time1" value={{ pro_time }}></td>
+                <td><input type="text" name="pro_time" id="time1" value={{ info.pro_time }}></td>
             </tr>
             <tr>
                 <td>负责人</td>
-                <td><input type="text" name="pro_leader" readonly="true" value={{ pro_leader }}></td>
+                <td><input type="text" name="pro_leader" readonly="true" value={{ info.pro_leader }}></td>
                 <td>负责人手机号码</td>
-                <td><input type="text" name="leader_phone" readonly="true" value={{ leader_phone }}></td>
+                <td><input type="text" name="leader_phone" readonly="true" value={{ info.leader_phone }}></td>
                 <td>指导教师</td>
-                <td><input type="text" name="tutor_name" readonly="true" value={{ tutor_id }}></td>
+                <td><input type="text" name="tutor_name" readonly="true" value={{ info.tutor_id }}></td>
             </tr>
             </tbody>
         </table>
@@ -48,19 +48,19 @@
             <tbody>
             <tr>
                 <td>学号</td>
-                <td><input type="text" name="leader_id" readonly="true" value={{ leader_id }}></td>
+                <td><input type="text" name="leader_id" readonly="true" value={{ info.leader_id }}></td>
                 <td>民族</td>
-                <td><input type="text" name="leader_ethnicity" value={{ leader_ethnicity }}></td>
+                <td><input type="text" name="leader_ethnicity" value={{ info.leader_ethnicity }}></td>
                 <td>出生日期</td>
-                <td><input type="text" name="leader_birth" id="time2" value={{ leader_birth }}></td>
+                <td><input type="text" name="leader_birth" id="time2" value={{ info.leader_birth }}></td>
             </tr>
             <tr>
                 <td>所在单位</td>
-                <td><input type="text" name="leader_units" readonly="true" value={{ leader_units }}></td>
+                <td><input type="text" name="leader_units" readonly="true" value={{ info.leader_units }}></td>
                 <td>通讯地址</td>
-                <td><input type="text" name="leader_address" value={{ leader_address }}></td>
+                <td><input type="text" name="leader_address" value={{ info.leader_address }}></td>
                 <td>电子邮箱</td>
-                <td><input type="email" name="email" readonly="true" value={{ email }}></td>
+                <td><input type="email" name="email" readonly="true" value={{ info.email }}></td>
             </tr>
             </tbody>
         </table>
@@ -75,63 +75,66 @@
                 <th>项目分工</th>
             </tr>
             <tr>
-                <td><input type="text" name="leader_name" id="leader_name" readonly="true" value={{ leader_name }}></td>
-                <td><input type="text" name="leader_id" id="leader_id" readonly="true" value={{ leader_id }}></td>
-                <td><input type="text" name="leader_institute" readonly="true" value={{ leader_institute }}></td>
-                <td><input type="text" name="leader__major_class" readonly="true" value={{ leader_major_class }}></td>
-                <td><input type="text" name="leader_job" value={{ leader_job }}></td>
+                <td><input type="text" name="leader_name" id="leader_name" readonly="true" value={{ info.pro_leader }}>
+                </td>
+                <td><input type="text" name="leader_id" id="leader_id" readonly="true" value={{ info.leader_id }}></td>
+                <td><input type="text" name="leader_institute" readonly="true" value={{ info.leader_institute }}></td>
+                <td><input type="text" name="leader__major_class" readonly="true" value={{ info.leader_major_class }}>
+                </td>
+                <td><input type="text" name="leader_job" value={{ info.leader_job }}></td>
             </tr>
             <tr>
-                <td><input type="text" name="mem1_name" value={{ mem1_name }}></td>
-                <td><input type="text" name="mem1_stuID" value={{ mem1_stuID }}></td>
-                <td><input type="text" name="mem1_institute" value={{ mem1_institute }}></td>
-                <td><input type="text" name="mem1_major_class" value={{ mem1_major_class }}></td>
-                <td><input type="text" name="mem1_job" value={{ mem1_job }}></td>
+                <td><input type="text" name="mem1_name" value={{ info.mem1_name }}></td>
+                <td><input type="text" name="mem1_stuID" value={{ info.mem1_stuID }}></td>
+                <td><input type="text" name="mem1_institute" value={{ info.mem1_institute }}></td>
+                <td><input type="text" name="mem1_major_class" value={{ info.mem1_major_class }}></td>
+                <td><input type="text" name="mem1_job" value={{ info.mem1_job }}></td>
             </tr>
             <tr>
-                <td><input type="text" name="mem2_name" value={{ mem2_name }}></td>
-                <td><input type="text" name="mem2_stuID" value={{ mem2_stuID }}></td>
-                <td><input type="text" name="mem2_institute" value={{ mem2_institute }}></td>
-                <td><input type="text" name="mem2_major_class" value={{ mem2_major_class }}></td>
-                <td><input type="text" name="mem2_job" value={{ mem2_job }}></td>
+                <td><input type="text" name="mem2_name" value={{ info.mem2_name }}></td>
+                <td><input type="text" name="mem2_stuID" value={{ info.mem2_stuID }}></td>
+                <td><input type="text" name="mem2_institute" value={{ info.mem2_institute }}></td>
+                <td><input type="text" name="mem2_major_class" value={{ info.mem2_major_class }}></td>
+                <td><input type="text" name="mem2_job" value={{ info.mem2_job }}></td>
             </tr>
             <tr>
-                <td><input type="text" name="mem3_name" value={{ mem3_name }}></td>
-                <td><input type="text" name="mem3_stuID" value={{ mem3_stuID }}></td>
-                <td><input type="text" name="mem3_institute" value={{ mem3_institute }}></td>
-                <td><input type="text" name="mem3_major_class" value={{ mem3_major_class }}></td>
-                <td><input type="text" name="mem3_job" value={{ mem3_job }}></td>
+                <td><input type="text" name="mem3_name" value={{ info.mem3_name }}></td>
+                <td><input type="text" name="mem3_stuID" value={{ info.mem3_stuID }}></td>
+                <td><input type="text" name="mem3_institute" value={{ info.mem3_institute }}></td>
+                <td><input type="text" name="mem3_major_class" value={{ info.mem3_major_class }}></td>
+                <td><input type="text" name="mem3_job" value={{ info.mem3_job }}></td>
             </tr>
             <tr>
-                <td><input type="text" name="mem4_name" value={{ mem4_name }}></td>
-                <td><input type="text" name="mem4_stuID" value={{ mem4_stuID }}></td>
-                <td><input type="text" name="mem4_institute" value={{ mem4_institute }}></td>
-                <td><input type="text" name="mem4_major_class" value={{ mem4_major_class }}></td>
-                <td><input type="text" name="mem4_job" value={{ mem4_job }}></td>
+                <td><input type="text" name="mem4_name" value={{ info.mem4_name }}></td>
+                <td><input type="text" name="mem4_stuID" value={{ info.mem4_stuID }}></td>
+                <td><input type="text" name="mem4_institute" value={{ info.mem4_institute }}></td>
+                <td><input type="text" name="mem4_major_class" value={{ info.mem4_major_class }}></td>
+                <td><input type="text" name="mem4_job" value={{ info.mem4_job }}></td>
             </tr>
             </tbody>
         </table>
         <div id="d1">
             | 项目具体信息：<br>
-            项目实验工作人时数 <input type="text" name="pro_hours" value={{ pro_hours }}><br>
+            项目实验工作人时数 <input type="text" name="pro_hours" value={{ info.pro_hours }}><br>
             （项目实验工作人时数指项目组成员进入实验室开展项目实验工作的总人时数<br>
             项目实验工作人时数=人数×实验小时数，实验小时数应与各实验室工作记录本中记录相符）<br>
             项目起止时间
-            <input type="text" name="pro_period" id="time1" value={{ pro_period }}><br>
+            <input type="text" name="pro_period" value={{ info.pro_period }}><br>
             项目完成情况
-            <select name="pro_status">
+            <select name="pro_status" id="pro_status">
+                <option value="">--</option>
                 <option value="提前">提前</option>
                 <option value="按时">按时</option>
                 <option value="延期">延期</option>
             </select><br>
             开展项目所用实验室 <br>
-            <textarea rows="3" cols="150" name="pro_lab" wrap="hard" id="text1">
+            <textarea rows="3" cols="150" name="pro_lab" wrap="hard" id="text1">{{ info.pro_lab }}
         </textarea><br>
             本项目使用主要仪器设备及耗材情况 <br>
-            <textarea rows="5" cols="150" name="pro_institution" wrap="hard" id="text2">
+            <textarea rows="5" cols="150" name="pro_institution" wrap="hard" id="text2">{{ info.pro_instrument }}
         </textarea><br>
             项目总结 <br>
-            <textarea rows="8" cols="150" name="pro_sum" wrap="hard" id="text3">
+            <textarea rows="8" cols="150" name="pro_sum" wrap="hard" id="text3">{{ info.pro_sum }}
         </textarea><br>
         </div>
         | 经费决算表
@@ -144,37 +147,37 @@
             </tr>
             <tr>
                 <td>经费收入</td>
-                <td><input type="text" name="money_in"></td>
-                <td><input type="text" name="money_in_remark"></td>
+                <td><input type="text" name="money_in" value={{ info.money_in }}></td>
+                <td><input type="text" name="money_in_remark" value={{ info.money_in_remark }}></td>
             </tr>
             <tr>
                 <td>实验耗材费</td>
-                <td><input type="text" name="money_consume"></td>
-                <td><input type="text" name="money_consume_remark"></td>
+                <td><input type="text" name="money_consume" value={{ info.money_consume }}></td>
+                <td><input type="text" name="money_consume_remark" value={{ info.money_consume_remark }}></td>
             </tr>
             <tr>
                 <td>指导老师实验津贴费</td>
-                <td><input type="text" name="money_allowance"></td>
-                <td><input type="text" name="money_allowance_remark"></td>
+                <td><input type="text" name="money_allowance" value={{ info.money_allowance }}></td>
+                <td><input type="text" name="money_allowance_remark" value={{ info.money_allowance_remark }}></td>
             </tr>
             <tr>
                 <td>其他</td>
-                <td><input type="text" name="money_other"></td>
-                <td><input type="text" name="money_other_remark"></td>
+                <td><input type="text" name="money_other" value={{ info.money_other }}></td>
+                <td><input type="text" name="money_other_remark" value={{ info.money_other_remark }}></td>
             </tr>
             <tr>
                 <td>合计</td>
-                <td><input type="text" name="money_total"></td>
-                <td><input type="text" name="money_total_remark"></td>
+                <td><input type="text" name="money_total" value={{ info.money_total }}></td>
+                <td><input type="text" name="money_total_remark" value={{ info.money_total_remark }}></td>
             </tr>
             <tr>
                 <td>经费结余</td>
-                <td><input type="text" name="money_rest"></td>
-                <td><input type="text" name="money_rest_remark"></td>
+                <td><input type="text" name="money_rest" value={{ info.money_rest }}></td>
+                <td><input type="text" name="money_rest_remark" value={{ info.money_rest_remark }}></td>
             </tr>
             </tbody>
         </table>
-
+        <input hidden name="status" id="status" value="0">
     </form>
     <button type="button" id="save">保存</button>
     <button type="button" id="sub">提交</button>
@@ -182,8 +185,10 @@
 </div>
 <script>
     $(document).ready(function () {
+        var status = "{{ info.pro_status }}";
+        $('#pro_status').val(status);
         $.ajaxSetup({
-            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
         });
         var nameCount = 1;
         var processingCount = 1;
@@ -213,43 +218,43 @@
         });
         $('#sub').click(function () {
             var flag = 1;
-            for (var i = 0; i < $('#info input').length; i++) {
-                if ($.trim($('#info input')[i].value) == "") {
-                    alert('需要全部填写，若没有则写"无"');
-                    flag = 0;
-                    break;
-                }
-            }
-            if (flag == 1) {
-                for (i = 0; i < $('#info textarea').length; i++) {
-                    if ($.trim($('#info textarea')[i].value) == "") {
-                        alert('需要全部填写，若没有则写"无"');
-                        flag = 0;
-                        break;
+            {#            for (var i = 0; i < $('#info input').length; i++) {#}
+            {#                if ($.trim($('#info input')[i].value) == "") {#}
+            {#                    alert('需要全部填写，若没有则写"无"');#}
+            {#                    flag = 0;#}
+            {#                    break;#}
+            {#                }#}
+            {#            }#}
+            {#            if (flag == 1) {#}
+            {#                for (i = 0; i < $('#info textarea').length; i++) {#}
+            {#                    if ($.trim($('#info textarea')[i].value) == "") {#}
+            {#                        alert('需要全部填写，若没有则写"无"');#}
+            {#                        flag = 0;#}
+            {#                        break;#}
+            {#                    }#}
+            {#                }#}
+            if (confirm("确认提交吗") == true) {
+                $('#status').val('1');
+                var data = $('#info').serializeArray();
+                console.log(data);
+                $.ajax({
+                    url: '/conclude_save',
+                    data: {
+                        'info': JSON.stringify(data)
+                    },
+                    type: 'POST',
+                    success: function (data) {
+                        console.log(data);
+                        alert('提交成功！');
+                        window.location.href = '/base';
+                    },
+                    error: function (data) {
+                        console.log(data);
                     }
-                }
-                if (flag == 1) {
-                    $('#status').val('1');
-                    var data = $('#info').serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: '/conclude_save',
-                        data: {
-                            'info': JSON.stringify(data)
-                        },
-                        type: 'POST',
-                        success: function (data) {
-                            console.log(data);
-                            alert('提交成功！');
-                            window.location.href = '/base';
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    })
+                })
 
-                }
             }
+            {#            }#}
 
 
         });

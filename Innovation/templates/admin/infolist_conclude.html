@@ -1,7 +1,7 @@
 {% extends 'admin/admin_base.html' %}
 {% block title %}项目信息{% endblock %}
 {% block headline %}
-    <h2 class="text-center text-secondary">中期报告提交情况</h2>
+    <h2 class="text-center text-secondary">结题报告提交情况</h2>
 {% endblock %}
 {% block content %}
 
@@ -65,8 +65,7 @@
             console.log(JSON.stringify(data));
             if (data.length > 1) {
                 $.ajax({
-                    {#                url: '/export',#}
-                    url: '/admin/write_to_middle',
+                    url: '/admin/write_to_conclude',
                     data: {
                         'choicelist': JSON.stringify(data)
                     },
@@ -102,7 +101,7 @@
             currentPage: {{ pageIndex }},
             onPageChange: function (page, type) {
                 if (type == 'change') {
-                    window.location.href = '/admin/base/middle_infolist?pageIndex=' + page;
+                    window.location.href = '/admin/base/infolist_conclude?pageIndex=' + page;
                 }
 
             }

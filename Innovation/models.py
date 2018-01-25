@@ -81,6 +81,7 @@ class Status(models.Model):
 class Conclude(models.Model):
     pro_id = models.IntegerField(primary_key=True)
     status = models.CharField(max_length=1, blank=True, null=True, default='')
+    export_time = models.CharField(max_length=255, blank=True, null=True, default='')
     pro_num = models.CharField(max_length=255, blank=True, null=True, default='')
     leader_id = models.CharField(max_length=255, blank=True, null=True)
     pro_time = models.CharField(max_length=255, blank=True, null=True, default='')
@@ -90,27 +91,27 @@ class Conclude(models.Model):
     leader_institute = models.CharField(max_length=255, blank=True, null=True, default='')
     leader_job = models.CharField(max_length=255, blank=True, null=True, default='')
     mem1_name = models.CharField(max_length=255, blank=True, null=True, default='')
-    mem1_stuid = models.CharField(db_column='mem1_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem1_stuID = models.CharField(db_column='mem1_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
     mem1_institute = models.CharField(max_length=255, blank=True, null=True, default='')
     mem1_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
     mem1_job = models.CharField(max_length=255, blank=True, null=True, default='')
     mem2_name = models.CharField(max_length=255, blank=True, null=True, default='')
-    mem2_stuid = models.CharField(db_column='mem2_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem2_stuID = models.CharField(db_column='mem2_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
     mem2_institute = models.CharField(max_length=255, blank=True, null=True, default='')
     mem2_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
     mem2_job = models.CharField(max_length=255, blank=True, null=True, default='')
     mem3_name = models.CharField(max_length=255, blank=True, null=True, default='')
-    mem3_stuid = models.CharField(db_column='mem3_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem3_stuID = models.CharField(db_column='mem3_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
     mem3_institute = models.CharField(max_length=255, blank=True, null=True, default='')
     mem3_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
     mem3_job = models.CharField(max_length=255, blank=True, null=True, default='')
     mem4_name = models.CharField(max_length=255, blank=True, null=True, default='')
-    mem4_stuid = models.CharField(db_column='mem4_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
+    mem4_stuID = models.CharField(db_column='mem4_stuID', max_length=255, blank=True, null=True, default='')  # Field name made lowercase.
     mem4_institute = models.CharField(max_length=255, blank=True, null=True, default='')
     mem4_major_class = models.CharField(max_length=255, blank=True, null=True, default='')
     mem4_job = models.CharField(max_length=255, blank=True, null=True, default='')
-    pro_lab = models.TextField(blank=True, null=True)
-    pro_instrument = models.TextField(blank=True, null=True)
+    pro_lab = models.TextField(blank=True, null=True, default='')
+    pro_instrument = models.TextField(blank=True, null=True, default='')
     pro_hours = models.CharField(max_length=255, blank=True, null=True, default='')
     pro_period = models.CharField(max_length=255, blank=True, null=True, default='')
     pro_status = models.CharField(max_length=255, blank=True, null=True, default='')

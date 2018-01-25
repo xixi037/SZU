@@ -40,9 +40,6 @@ def base(request):
 
 
 
-
-
-
 def success(request):
     response = render(request, 'achieve.html')
     if request.GET.get('url', '') != '':
@@ -161,8 +158,11 @@ def cancel(request):
 def upload_apply(request):
     return render(request, 'upload_apply.html')
 
+def upload_conclude(request):
+    return render(request, 'upload_conclude.html')
 
-def getfile(request):
+
+def getfile_apply(request):
     if request.FILES.get('file', '') != '':
         file_obj = request.FILES.get('file')
         if request.COOKIES.get('username', '') != '':
@@ -424,6 +424,10 @@ def infostore(request):
         print('建立中期报告数据库')
         print(pro_id)
         Middle.objects.create(pro_id=pro_id, leader_id=username)
+    if not Conclude.objects.filter(leader_id=username):
+        print('建立中期报告数据库')
+        print(pro_id)
+        Conclude.objects.create(pro_id=pro_id, leader_id=username)
     return HttpResponse('success')
 
 def middle(request):
@@ -491,11 +495,6 @@ def conclude(request):
         info['pro_name'] = i.pro_name
         info['tutor_id'] = i.tutor_id
         id = i.id
-    # mem_info = Members.objects.filter(pro_id=id)
-    # memlist = []
-    # for i in mem_info:
-    #     memlist.append(i.stu_id)
-    # info["pro_mems"] = '/'.join(memlist)
     info['leader_id'] = username
     info['leader_units'] = "深圳大学"
     user_info = Users.objects.filter(username=username)
@@ -503,10 +502,12 @@ def conclude(request):
         info['pro_leader'] = i.name
         info['leader_phone'] = i.phone
         info['email'] = i.email
+        info['leader_institute'] = i.institute
+        info['leader_major_class'] = i.major + i.classID
     # print(info)
     for i in pro_conclude:
         print(i.status)
         if i.status == '1':
-            return render(request, 'submitted_middle.html', {'info': info})
+            return render(request, 'submitted_conclude.html', {'info': info})
     return render(request, 'conclude.html',
                   {'info': info})
