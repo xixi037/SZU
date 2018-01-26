@@ -96,6 +96,22 @@ def manage_conclude_info(request):
 
     return render(request, 'admin/infolist_conclude.html', {'infolist':info, 'pageIndex':pageIndex, 'count':count, 'page':page})
 
+def manage_files_info(request):
+    base_path = os.getcwd()
+    file = 'other'
+    file_dir = os.path.join(base_path, file)
+    filelist = []
+    for root, dirs, files in os.walk(file_dir):
+        for file in files:
+            filelist.append(file)
+    print(filelist)
+    pageIndex = int(request.GET.get('pageIndex', 1))
+    count = len(filelist)
+    print('列表长度：' + str(count))
+    page = int(math.ceil(count / 20))
+    return render(request, 'admin/infolist_files.html',{'infolist':filelist, 'pageIndex':pageIndex, 'count':count, 'page':page})
+
+
 
 def manage_user(request):
     alluser = Users.objects.all()

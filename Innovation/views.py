@@ -10,7 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse, JsonResponse
 from django.shortcuts import render
 
-from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status, Conclude
+from Innovation.models import Users, Middle, ProInfo, Managers, Members, Status, Conclude, Apply
 
 
 def nav_status(request):
@@ -26,14 +26,6 @@ def nav_status(request):
 def base(request):
     username = request.COOKIES.get('username')
     if ProInfo.objects.filter(leader_id=username):
-        # status = Status.objects.all()[0]
-        # mode = status.mode
-        # date1 = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-        # date1 = date1.replace("-", "")
-        # date = Status.objects.all()[0]
-        # date2 = str(date.date)
-        # date2 = date2.replace("-", "")
-        # return render(request, 'base.html', {'username': username, 'status': mode, 'date': date1 <= date2})
         return render(request,'base.html')
     else:
         return HttpResponseRedirect('/index')
@@ -49,16 +41,12 @@ def success(request):
 
 
 
-
-
 def downloadFile(request):
     if request.GET.get('url', '') != '':
         print('有参数啦')
         filename = request.GET["url"]
-        file_name = filename.split(os.sep)[-1]
+        # file_name = filename.split(os.sep)[-1]
         print(filename)
-        # filenamelist = [r'C:\Users\HP\Desktop\SZU\middle\中期报告_邓云_陈希曦_基于Python的网络爬虫.doc',r'C:\Users\HP\Desktop\SZU\middle\中期报告_邓云_黄树华_基于深度学习的肌电图、脑电图分析2.doc']
-        # for filename in filenamelist:
         file_name = filename.split(os.sep)[-1]
         def file_iterator(file_name, chunk_size=512):
             with open(file_name, 'rb') as f:
@@ -186,7 +174,55 @@ def getfile_apply(request):
                     dest.close()
             return render(request, 'base.html', {'username': username})
         return HttpResponseRedirect('/login')
-    return HttpResponseRedirect('/upload')
+    return HttpResponseRedirect('/upload_apply')
+
+def getfile_conclude(request):
+    print('跳转到此页面了')
+    username = request.COOKIES.get('username')
+    user_info = Users.objects.filter(username=username)
+    pro_info = ProInfo.objects.filter(leader_id=username)
+    print(username)
+    if user_info:
+        for i in user_info:
+            name = i.name
+    if pro_info:
+        for i in pro_info:
+            tutor_name = i.tutor_id
+            pro_name = i.pro_name
+    else:
+        return HttpResponseRedirect('/base')
+    if request.FILES.get('experiment_file', '') != '':
+        print('有文件啦！')
+        file_obj = request.FILES.get('experiment_file')
+        path = os.getcwd() + os.sep + 'other'
+        savename = '实验报告_' + tutor_name + '_' + name + '_' + pro_name + '.doc'
+        filepath = os.path.join(path, savename)
+        print(filepath)
+        dest = open(filepath, 'wb+')
+        dest.write(file_obj.read())
+        dest.close()
+        return render(request,'upload_conclude.html',{'status1':'上传成功！'})
+    if request.FILES.get('research_file', '') != '':
+        file_obj = request.FILES.get('research_file')
+        path = os.getcwd() + os.sep + 'other'
+        savename = '研究报告_' + tutor_name + '_' + name + '_' + pro_name + '.doc'
+        filepath = os.path.join(path, savename)
+        print(filepath)
+        dest = open(filepath, 'wb+')
+        dest.write(file_obj.read())
+        dest.close()
+        return render(request, 'upload_conclude.html', {'status2': '上传成功！'})
+    if request.FILES.get('compressed_file', '') != '':
+        file_obj = request.FILES.get('compressed_file')
+        path = os.getcwd() + os.sep + 'other'
+        savename = '压缩文件_' + tutor_name + '_' + name + '_' + pro_name + '.zip'
+        filepath = os.path.join(path, savename)
+        print(filepath)
+        dest = open(filepath, 'wb+')
+        dest.write(file_obj.read())
+        dest.close()
+        return render(request, 'upload_conclude.html', {'status3': '上传成功！'})
+    return HttpResponseRedirect('/upload_conclude')
 
 
 def change_password(request):
@@ -289,7 +325,6 @@ def index(request):
 
 def base_mypro(request):
     username = request.COOKIES.get('username')
-
     info = []
     if ProInfo.objects.filter(leader_id=username):
         leader = Users.objects.get(username=username)
@@ -420,12 +455,16 @@ def infostore(request):
         Members.objects.filter(pro_id=pro_id).delete()
     for i in memlist:
         Members.objects.create(pro_id=pro_id, stu_id=i)
+    if not Apply.objects.filter(leader_id=username):
+        print('建立申请报告数据库')
+        print(pro_id)
+        Apply.objects.create(pro_id=pro_id, leader_id=username)
     if not Middle.objects.filter(leader_id=username):
         print('建立中期报告数据库')
         print(pro_id)
         Middle.objects.create(pro_id=pro_id, leader_id=username)
     if not Conclude.objects.filter(leader_id=username):
-        print('建立中期报告数据库')
+        print('建立结题报告数据库')
         print(pro_id)
         Conclude.objects.create(pro_id=pro_id, leader_id=username)
     return HttpResponse('success')
