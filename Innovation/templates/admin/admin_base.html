@@ -30,7 +30,7 @@
                         提交记录
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">项目申请</a>
+                        <a class="dropdown-item" href="javascript:apply_record()">项目申请</a>
                         <a class="dropdown-item" href="javascript:middle_record()">中期报告</a>
                         <a class="dropdown-item" href="javascript:conclude_record()">结题报告</a>
                         <a class="dropdown-item" href="javascript:files_record()">其他文件</a>
@@ -63,6 +63,9 @@
     };
     var manage_userlist = function () {
         window.location.href = "/admin/base/userlist";
+    };
+    var apply_record = function () {
+        window.location.href = "/admin/base/apply_infolist";
     };
     var middle_record = function () {
         window.location.href = "/admin/base/middle_infolist";

@@ -18,7 +18,7 @@
             if (data.length > 1) {
                 $.ajax({
                     {#                url: '/export',#}
-                    url: '/admin/write_to_middle',
+                    url: '/admin/write_to_apply',
                     data: {
                         'choicelist': JSON.stringify(data)
                     },
@@ -54,7 +54,7 @@
             currentPage: {{ pageIndex }},
             onPageChange: function (page, type) {
                 if (type == 'change') {
-                    window.location.href = '/admin/base/infolist?pageIndex=' + page;
+                    window.location.href = '/admin/base/apply_infolist?pageIndex=' + page;
                 }
 
             }

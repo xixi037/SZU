@@ -144,7 +144,7 @@ class Apply(models.Model):
     fillin_time = models.CharField(max_length=255, blank=True, null=True, default='')
     pro_way = models.CharField(max_length=255, blank=True, null=True, default='')
     search_area = models.CharField(max_length=255, blank=True, null=True, default='')
-    tutor_research = models.CharField(max_length=255, blank=True, null=True, default='')
+    tutor_area = models.CharField(max_length=255, blank=True, null=True, default='')
     tutor_phone = models.CharField(max_length=255, blank=True, null=True, default='')
     tutor_email = models.CharField(max_length=255, blank=True, null=True, default='')
     leader_grade = models.CharField(max_length=255, blank=True, null=True, default='')

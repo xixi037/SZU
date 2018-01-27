@@ -49,7 +49,8 @@
             <tbody>
             <tr>
                 <td>导师姓名</td>
-                <td><input type="text" name="tutor_name" id="tutor_name" readonly="true" value={{ info.tutor_name }}></td>
+                <td><input type="text" name="tutor_name" id="tutor_name" readonly="true" value={{ info.tutor_name }}>
+                </td>
                 <td>导师研究专长</td>
                 <td><input type="text" name="tutor_area" value={{ info.tutor_area }}></td>
             </tr>
@@ -64,7 +65,6 @@
 
         <table id="t3">
             | 项目参与人信息：（请将主要负责人写在第一个）
-            <button type="button" id="addmem">添加</button>
             <tbody>
             <tr>
                 <th>姓名</th>
@@ -76,13 +76,41 @@
                 <th>所在学院</th>
             </tr>
             <tr>
-                <td><input type="text" name="pro_leader" id="pro_leader" readonly="true" value={{ info.pro_leader }}></td>
+                <td><input type="text" name="pro_leader" id="pro_leader" readonly="true" value={{ info.pro_leader }}>
+                </td>
                 <td><input type="text" name="leader_sex" readonly="true" value={{ info.leader_sex }}></td>
                 <td><input type="text" name="leader_id" readonly="true" value={{ info.leader_id }}></td>
                 <td><input type="text" name="leader_grade" value={{ info.leader_grade }}></td>
                 <td><input type="text" name="leader_area" value={{ info.leader_area }}></td>
                 <td><input type="text" name="leader_job" value={{ info.leader_job }}></td>
                 <td><input type="text" name="leader_institute" readonly="true" value={{ info.leader_institute }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem1_name" value={{ info.mem1_name }}></td>
+                <td><input type="text" name="mem1_sex" value={{ info.mem1_sex }}></td>
+                <td><input type="text" name="mem1_stuID" value={{ info.mem1_stuID }}></td>
+                <td><input type="text" name="mem1_grade" value={{ info.mem1_grade }}></td>
+                <td><input type="text" name="mem1_area" value={{ info.mem1_area }}></td>
+                <td><input type="text" name="mem1_job" value={{ info.mem1_job }}></td>
+                <td><input type="text" name="mem1_institute" value={{ info.mem1_institute }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem2_name" value={{ info.mem2_name }}></td>
+                <td><input type="text" name="mem2_sex" value={{ info.mem2_sex }}></td>
+                <td><input type="text" name="mem2_stuID" value={{ info.mem2_stuID }}></td>
+                <td><input type="text" name="mem2_grade" value={{ info.mem2_grade }}></td>
+                <td><input type="text" name="mem2_area" value={{ info.mem2_area }}></td>
+                <td><input type="text" name="mem2_job" value={{ info.mem2_job }}></td>
+                <td><input type="text" name="mem2_institute" value={{ info.mem2_institute }}></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="mem3_name" value={{ info.mem3_name }}></td>
+                <td><input type="text" name="mem3_sex" value={{ info.mem3_sex }}></td>
+                <td><input type="text" name="mem3_stuID" value={{ mem3_stuID }}></td>
+                <td><input type="text" name="mem3_grade" value={{ info.leader_grade }}></td>
+                <td><input type="text" name="mem3_area" value={{ info.mem3_area }}></td>
+                <td><input type="text" name="mem3_job" value={{ info.mem3_job }}></td>
+                <td><input type="text" name="mem3_institute" value={{ info.mem3_institute }}></td>
             </tr>
             </tbody>
         </table>
@@ -102,7 +130,6 @@
         </textarea><br>
             <table id="t4">
                 五、项目进度安排
-                <button type="button" id="addprocessing">添加</button>
                 <tbody>
                 <tr>
                     <th>时间</th>
@@ -112,7 +139,37 @@
                 <tr>
                     <td><input type="text" name="time1" value={{ info.time1 }}></td>
                     <td><input type="text" name="content1" value={{ info.content1 }}></td>
-                    <td><input type="text" name="leader1" value={{ info. leader1 }}></td>
+                    <td><input type="text" name="leader1" value={{ info.leader1 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time2" value={{ info.time2 }}></td>
+                    <td><input type="text" name="content2" value={{ info.content2 }}></td>
+                    <td><input type="text" name="leader2" value={{ info.leader2 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time3" value={{ info.time3 }}></td>
+                    <td><input type="text" name="content3" value={{ info.content3 }}></td>
+                    <td><input type="text" name="leader3" value={{ info.leader3 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time4" value={{ info.time4 }}></td>
+                    <td><input type="text" name="content4" value={{ info.content4 }}></td>
+                    <td><input type="text" name="leader4" value={{ info.leader4 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time5" value={{ info.time5 }}></td>
+                    <td><input type="text" name="content5" value={{ info.content5 }}></td>
+                    <td><input type="text" name="leader5" value={{ info.leader5 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time6" value={{ info.time6 }}></td>
+                    <td><input type="text" name="content6" value={{ info.content6 }}></td>
+                    <td><input type="text" name="leader6" value={{ info.leader6 }}></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="time7" value={{ info.time7 }}></td>
+                    <td><input type="text" name="content7" value={{ info.content7 }}></td>
+                    <td><input type="text" name="leader7" value={{ info.leader7 }}></td>
                 </tr>
                 </tbody>
             </table>
@@ -189,11 +246,12 @@
             </table>
         </div>
 
-
+        <input hidden name="status" id="status" value="0">
     </form>
+    <p style="color:red">【注】提交后无法更改！</p>
+    <button type="button" id="save">保存</button>
     <button type="button" id="sub">提交</button>
-    {#<button type="button" id="exportword">导出word</button>#}
-    <section id="model_section" class="container"></section>
+    <button type="button" id="close">关闭</button>
 </div>
 <script>
     $(document).ready(function () {
@@ -203,52 +261,48 @@
         var nameCount = 1;
         var processingCount = 2;
         var s;
-        $('#addmem').click(function () {
-            if (nameCount < 4) {
-                s = nameCount.toString();
-                $('#t3 tr').eq(-1).after('<tr>' +
-                    '            <td><input type="text" name="mem' + s + '_name"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_sex"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_stuID"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_grade"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_area"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_job"></td>\n' +
-                    '            <td><input type="text" name="mem' + s + '_institute"></td>' +
-                    '        </tr>');
-                nameCount++;
-            }
-        });
-        $('#addprocessing').click(function () {
-            if (processingCount <= 7) {
-                s = processingCount.toString();
-                $('#t4 tr').eq(-1).after('<tr>' +
-                    '            <td><input type="text" name="time' + s + '"></td>\n' +
-                    '            <td><input type="text" name="content' + s + '"></td>\n' +
-                    '            <td><input type="text" name="leader' + s + '"></td>\n' +
-                    '        </tr>');
-                processingCount++;
-            }
-        });
-        $('#sub').click(function () {
+        $('#save').click(function () {
             var data = $('#info').serializeArray();
             console.log(data);
             $.ajax({
-                {#                url:'/wordmodel',#}
                 url: '/apply_save',
                 data: {
                     'info': JSON.stringify(data)
                 },
                 type: 'POST',
                 success: function (data) {
-                    console.log(data);
-                    alert('提交成功！');
-                    window.location.href = '/base';
+                    alert('保存成功！');
                 },
                 error: function (data) {
                     console.log(data);
                 }
             })
         });
+        $('#sub').click(function () {
+            if (confirm("确认提交吗") == true) {
+                $('#status').val('1');
+                var data = $('#info').serializeArray();
+                console.log(data);
+                $.ajax({
+                    url: '/apply_save',
+                    data: {
+                        'info': JSON.stringify(data)
+                    },
+                    type: 'POST',
+                    success: function (data) {
+                        console.log(data);
+                        alert('提交成功！');
+                        window.location.href = '/base';
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                })
+            }
+        });
+    });
+    $('#close').click(function () {
+        window.location.href = '/base'
     });
 
 </script>

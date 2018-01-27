@@ -506,20 +506,27 @@ def middle(request):
 
 def apply(request):
     if request.COOKIES.get('username', '') != '':
-        # username = request.COOKIES.get('username')
-        # user = Users.objects.filter(username=username)
-        # for i in user:
-        #     pro_name = i.pro_name
-        #     tutor_name = i.tutor_name
-        #     name = i.name
-        #     sex = i.sex
-        #     major = i.major
-        #     phone = i.phone
-        #     email = i.email
-        # return render(request, 'test5.html', {'username': username, 'pro_name': pro_name, 'tutor_name': tutor_name,
-        #                                       'pro_leader': name, 'sex': sex, 'major': major, 'leader_phone': phone,
-        #                                       'leader_email': email})
-        return render(request, 'apply.html')
+        username = request.COOKIES.get('username')
+        pro_apply = Apply.objects.filter(leader_id=username)
+        for i in pro_apply:
+            status = i.status
+            info = model_to_dict(i)
+            pro_id = i.pro_id
+        user = Users.objects.filter(username=username)
+        for i in user:
+            info['pro_leader'] = i.name
+            info['leader_sex'] =i.sex
+            info['leader_major'] = i.major
+            info['leader_institute'] = i.institute
+            info['leader_phone'] = i.phone
+            info['leader_email'] = i.email
+        pro = ProInfo.objects.filter(id=pro_id)
+        for i in pro:
+            info['pro_name'] = i.pro_name
+            info['tutor_name'] = i.tutor_id
+        if status == '1':
+            return render(request, 'submitted_apply.html',{'info':info})
+        return render(request, 'apply.html', {'info': info})
     return HttpResponseRedirect('/login')
 
 def conclude(request):
@@ -543,10 +550,8 @@ def conclude(request):
         info['email'] = i.email
         info['leader_institute'] = i.institute
         info['leader_major_class'] = i.major + i.classID
-    # print(info)
     for i in pro_conclude:
         print(i.status)
         if i.status == '1':
             return render(request, 'submitted_conclude.html', {'info': info})
-    return render(request, 'conclude.html',
-                  {'info': info})
+    return render(request, 'conclude.html',{'info': info})

@@ -19,7 +19,7 @@ def save_apply(request):
         pro_way = info.get('pro_way', '')
         search_area = info.get('search_area', '')
         status = info.get('status', '')
-        tutor_research = info.get('tutor_research', '')
+        tutor_area = info.get('tutor_area', '')
         tutor_phone = info.get('tutor_phone', '')
         tutor_email = info.get('tutor_email', '')
         leader_grade = info.get('leader_grade', '')
@@ -95,9 +95,9 @@ def save_apply(request):
         date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
 
         if Apply.objects.filter(leader_id=leader_id):
-            Apply.objects.filter(leader_id=leader_id).update(status=status,leader_id=leader_id,
+            Apply.objects.filter(leader_id=leader_id).update(status=status, leader_id=leader_id, fillin_time=date,
                                                              pro_way=pro_way, search_area=search_area,
-                                                             tutor_research=tutor_research, tutor_phone=tutor_phone,
+                                                             tutor_area=tutor_area, tutor_phone=tutor_phone,
                                                              tutor_email=tutor_email, leader_grade=leader_grade,
                                                              leader_area=leader_area, leader_job=leader_job,
                                                              mem1_name=mem1_name, mem1_sex=mem1_sex,
@@ -113,58 +113,77 @@ def save_apply(request):
                                                              mem3_institute=mem3_institute, pro_reason=pro_reason,
                                                              pro_content=pro_content, pro_innovation=pro_innovation,
                                                              pro_source=pro_source, time1=time1, content1=content1,
-                                                             leader1=leader1,time2=time2, time3=time3, time4=time4, time5=time5,
+                                                             leader1=leader1, time2=time2, time3=time3, time4=time4,
+                                                             time5=time5,
                                                              time6=time6, time7=time7, content2=content2,
-                                                             content3=content3,content4=content4, content5=content5, content6=content6,
-                                                             content7=content7,leader2=leader2, leader3=leader3, leader4=leader4,
+                                                             content3=content3, content4=content4, content5=content5,
+                                                             content6=content6,
+                                                             content7=content7, leader2=leader2, leader3=leader3,
+                                                             leader4=leader4,
                                                              leader5=leader5, leader6=leader6, leader7=leader7,
                                                              pro_achievement=pro_achievement, pro_endtime=pro_endtime,
                                                              pro_form=pro_form, pro_participant=pro_participant,
-                                                             budget_equip_money=budget_equip_money,budget_equip_reason=budget_equip_reason,
-                                                             budget_material_money=budget_material_money,budget_material_reason=budget_material_reason,
-                                                             budget_meeting_money=budget_meeting_money,budget_meeting_reason=budget_meeting_reason,
-                                                             budget_apply_money=budget_apply_money,budget_apply_reason=budget_apply_reason,
-                                                             budget_books_money=budget_books_money,budget_books_reason=budget_books_reason,
-                                                             budget_trans_money=budget_trans_money,budget_trans_reason=budget_trans_reason,
-                                                             budget_service_money=budget_service_money,budget_service_reason=budget_service_reason
+                                                             budget_equip_money=budget_equip_money,
+                                                             budget_equip_reason=budget_equip_reason,
+                                                             budget_material_money=budget_material_money,
+                                                             budget_material_reason=budget_material_reason,
+                                                             budget_meeting_money=budget_meeting_money,
+                                                             budget_meeting_reason=budget_meeting_reason,
+                                                             budget_apply_money=budget_apply_money,
+                                                             budget_apply_reason=budget_apply_reason,
+                                                             budget_books_money=budget_books_money,
+                                                             budget_books_reason=budget_books_reason,
+                                                             budget_trans_money=budget_trans_money,
+                                                             budget_trans_reason=budget_trans_reason,
+                                                             budget_service_money=budget_service_money,
+                                                             budget_service_reason=budget_service_reason,
+                                                             budget_other_money=budget_other_money,
+                                                             budget_other_reason=budget_other_reason,
+                                                             budget_total_money=budget_total_money
                                                              )
         else:
             if ProInfo.objects.filter(leader_id=leader_id):
                 pro_object = ProInfo.objects.filter(leader_id=leader_id)
                 for i in pro_object:
                     pro_id = i.id
-                    Apply.objects.create(status=status,leader_id=leader_id,
-                                                             pro_way=pro_way, search_area=search_area,
-                                                             tutor_research=tutor_research, tutor_phone=tutor_phone,
-                                                             tutor_email=tutor_email, leader_grade=leader_grade,
-                                                             leader_area=leader_area, leader_job=leader_job,
-                                                             mem1_name=mem1_name, mem1_sex=mem1_sex,
-                                                             mem1_stuID=mem1_stuID, mem1_grade=mem1_grade,
-                                                             mem1_area=mem1_area, mem1_job=mem1_job,
-                                                             mem1_institute=mem1_institute, mem2_name=mem2_name,
-                                                             mem2_sex=mem2_sex, mem2_stuID=mem2_stuID,
-                                                             mem2_grade=mem2_grade, mem2_area=mem2_area,
-                                                             mem2_job=mem2_job, mem2_institute=mem2_institute,
-                                                             mem3_name=mem3_name, mem3_sex=mem3_sex,
-                                                             mem3_stuID=mem3_stuID, mem3_grade=mem3_grade,
-                                                             mem3_area=mem3_area, mem3_job=mem3_job,
-                                                             mem3_institute=mem3_institute, pro_reason=pro_reason,
-                                                             pro_content=pro_content, pro_innovation=pro_innovation,
-                                                             pro_source=pro_source, time1=time1, content1=content1,
-                                                             leader1=leader1,time2=time2, time3=time3, time4=time4, time5=time5,
-                                                             time6=time6, time7=time7, content2=content2,
-                                                             content3=content3,content4=content4, content5=content5, content6=content6,
-                                                             content7=content7,leader2=leader2, leader3=leader3, leader4=leader4,
-                                                             leader5=leader5, leader6=leader6, leader7=leader7,
-                                                             pro_achievement=pro_achievement, pro_endtime=pro_endtime,
-                                                             pro_form=pro_form, pro_participant=pro_participant,
-                                                             budget_equip_money=budget_equip_money,budget_equip_reason=budget_equip_reason,
-                                                             budget_material_money=budget_material_money,budget_material_reason=budget_material_reason,
-                                                             budget_meeting_money=budget_meeting_money,budget_meeting_reason=budget_meeting_reason,
-                                                             budget_apply_money=budget_apply_money,budget_apply_reason=budget_apply_reason,
-                                                             budget_books_money=budget_books_money,budget_books_reason=budget_books_reason,
-                                                             budget_trans_money=budget_trans_money,budget_trans_reason=budget_trans_reason,
-                                                             budget_service_money=budget_service_money,budget_service_reason=budget_service_reason)
+                    Apply.objects.create(status=status, leader_id=leader_id, fillin_time=date,
+                                         pro_way=pro_way, search_area=search_area,
+                                         tutor_area=tutor_area, tutor_phone=tutor_phone,
+                                         tutor_email=tutor_email, leader_grade=leader_grade,
+                                         leader_area=leader_area, leader_job=leader_job,
+                                         mem1_name=mem1_name, mem1_sex=mem1_sex,
+                                         mem1_stuID=mem1_stuID, mem1_grade=mem1_grade,
+                                         mem1_area=mem1_area, mem1_job=mem1_job,
+                                         mem1_institute=mem1_institute, mem2_name=mem2_name,
+                                         mem2_sex=mem2_sex, mem2_stuID=mem2_stuID,
+                                         mem2_grade=mem2_grade, mem2_area=mem2_area,
+                                         mem2_job=mem2_job, mem2_institute=mem2_institute,
+                                         mem3_name=mem3_name, mem3_sex=mem3_sex,
+                                         mem3_stuID=mem3_stuID, mem3_grade=mem3_grade,
+                                         mem3_area=mem3_area, mem3_job=mem3_job,
+                                         mem3_institute=mem3_institute, pro_reason=pro_reason,
+                                         pro_content=pro_content, pro_innovation=pro_innovation,
+                                         pro_source=pro_source, time1=time1, content1=content1,
+                                         leader1=leader1, time2=time2, time3=time3, time4=time4, time5=time5,
+                                         time6=time6, time7=time7, content2=content2,
+                                         content3=content3, content4=content4, content5=content5, content6=content6,
+                                         content7=content7, leader2=leader2, leader3=leader3, leader4=leader4,
+                                         leader5=leader5, leader6=leader6, leader7=leader7,
+                                         pro_achievement=pro_achievement, pro_endtime=pro_endtime,
+                                         pro_form=pro_form, pro_participant=pro_participant,
+                                         budget_equip_money=budget_equip_money, budget_equip_reason=budget_equip_reason,
+                                         budget_material_money=budget_material_money,
+                                         budget_material_reason=budget_material_reason,
+                                         budget_meeting_money=budget_meeting_money,
+                                         budget_meeting_reason=budget_meeting_reason,
+                                         budget_apply_money=budget_apply_money, budget_apply_reason=budget_apply_reason,
+                                         budget_books_money=budget_books_money, budget_books_reason=budget_books_reason,
+                                         budget_trans_money=budget_trans_money, budget_trans_reason=budget_trans_reason,
+                                         budget_service_money=budget_service_money,
+                                         budget_service_reason=budget_service_reason,
+                                         budget_other_money=budget_other_money, budget_other_reason=budget_other_reason,
+                                         budget_total_money=budget_total_money
+                                         )
             else:
                 return HttpResponseRedirect('404.html')
 

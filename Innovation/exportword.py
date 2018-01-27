@@ -28,7 +28,7 @@ def write_to_apply(request):
         pathlist = []
         for id in choicelist:
             if Apply.objects.filter(leader_id=id):
-                apply_info = Middle.objects.filter(leader_id=id)
+                apply_info = Apply.objects.filter(leader_id=id)
                 user_info = Users.objects.filter(username=id)
                 for i in apply_info:
                     pro_info = ProInfo.objects.filter(id=i.pro_id)
@@ -152,7 +152,7 @@ def write_to_apply(request):
                         mem1_stuID_pos.Range.Text = info.mem1_stuID
                         mem1_grade_pos.Range.Text = info.mem1_grade
                         mem1_area_pos.Range.Text = info.mem1_area
-                        mem1_job_pos.Range.Text = info.mem1_job_
+                        mem1_job_pos.Range.Text = info.mem1_job
                         mem1_institute_pos.Range.Text = info.mem1_institute
                         mem2_name_pos.Range.Text = info.mem2_name
                         mem2_sex_pos.Range.Text = info.mem2_sex
@@ -174,10 +174,24 @@ def write_to_apply(request):
                         pro_innovation_pos = t2.Cell(15, 1)
                         pro_source_pos = t2.Cell(16, 1)
 
-                        pro_reason_pos.Range.Text = info.pro_reason_pos
-                        pro_content_pos.Range.Text = info.pro_content_pos
-                        pro_innovation_pos.Range.Text = info.pro_innovation_pos
-                        pro_source_pos.Range.Text = info.pro_source_pos
+                        reason_title = str(pro_reason_pos).replace('\r', '')
+                        content_title = str(pro_content_pos).replace('\r', '')
+                        innovation_title = str(pro_innovation_pos).replace('\r', '')
+                        source_title = str(pro_source_pos).replace('\r', '')
+
+                        if info.pro_reason.strip() != '':
+                            pro_reason_pos.Range.Text = reason_title + '\n' + info.pro_reason
+                        if info.pro_content.strip() != '':
+                            pro_content_pos.Range.Text = content_title + '\n' + info.pro_content
+                        if info.pro_innovation.strip() != '':
+                            pro_innovation_pos.Range.Text = innovation_title + '\n' + info.pro_innovation
+                        if info.pro_source.strip() != '':
+                            pro_source_pos.Range.Text = source_title + '\n' + info.pro_source
+
+                        # pro_reason_pos.Range.Text = info.pro_reason
+                        # pro_content_pos.Range.Text = info.pro_content
+                        # pro_innovation_pos.Range.Text = info.pro_innovation
+                        # pro_source_pos.Range.Text = info.pro_source
 
                         time1_pos = t2.Cell(19, 1)
                         content1_pos = t2.Cell(19, 2)
@@ -201,37 +215,38 @@ def write_to_apply(request):
                         content7_pos = t2.Cell(25, 2)
                         leader7_pos = t2.Cell(25, 3)
 
-                        time1_pos.Range.Text = info.time1_pos
-                        content1_pos.Range.Text = info.content1_pos
-                        leader1_pos.Range.Text = info.leader1_pos
-                        time2_pos.Range.Text = info.time2_pos
-                        content2_pos.Range.Text = info.content2_pos
-                        leader2_pos.Range.Text = info.leader2_pos
-                        time3_pos.Range.Text = info.time3_pos
-                        content3_pos.Range.Text = info.content3_pos
-                        leader3_pos.Range.Text = info.leader3_pos
-                        time4_pos.Range.Text = info.time4_pos
-                        content4_pos.Range.Text = info.content4_pos
-                        leader4_pos.Range.Text = info.leader4_pos
-                        time5_pos.Range.Text = info.time5_pos
-                        content5_pos.Range.Text = info.content5_pos
-                        leader5_pos.Range.Text = info.leader5_pos
-                        time6_pos.Range.Text = info.time6_pos
-                        content6_pos.Range.Text = info.content6_pos
-                        leader6_pos.Range.Text = info.leader6_pos
-                        time7_pos.Range.Text = info.time7_pos
-                        content7_pos.Range.Text = info.content7_pos
-                        leader7_pos.Range.Text = info.leader7_pos
+                        time1_pos.Range.Text = info.time1
+                        content1_pos.Range.Text = info.content1
+                        leader1_pos.Range.Text = info.leader1
+                        time2_pos.Range.Text = info.time2
+                        content2_pos.Range.Text = info.content2
+                        leader2_pos.Range.Text = info.leader2
+                        time3_pos.Range.Text = info.time3
+                        content3_pos.Range.Text = info.content3
+                        leader3_pos.Range.Text = info.leader3
+                        time4_pos.Range.Text = info.time4
+                        content4_pos.Range.Text = info.content4
+                        leader4_pos.Range.Text = info.leader4
+                        time5_pos.Range.Text = info.time5
+                        content5_pos.Range.Text = info.content5
+                        leader5_pos.Range.Text = info.leader5
+                        time6_pos.Range.Text = info.time6
+                        content6_pos.Range.Text = info.content6
+                        leader6_pos.Range.Text = info.leader6
+                        time7_pos.Range.Text = info.time7
+                        content7_pos.Range.Text = info.content7
+                        leader7_pos.Range.Text = info.leader7
 
                         pro_achievement_pos = t2.Cell(28, 2)
                         pro_endtime_pos = t2.Cell(28, 3)
                         pro_form_pos = t2.Cell(28, 4)
                         pro_participant_pos = t2.Cell(28, 5)
 
-                        pro_achievement_pos.Range.Text = info.pro_achievement_pos
-                        pro_endtime_pos.Range.Text = info.pro_endtime_pos
-                        pro_form_pos.Range.Text = info.pro_form_pos
-                        pro_participant_pos.Range.Text = info.pro_participant_pos
+
+                        pro_achievement_pos.Range.Text = info.pro_achievement
+                        pro_endtime_pos.Range.Text = info.pro_endtime
+                        pro_form_pos.Range.Text = info.pro_form
+                        pro_participant_pos.Range.Text = info.pro_participant
 
                         t3 = doc.Tables[2]
                         budget_equip_money_pos = t3.Cell(3, 2)
@@ -252,23 +267,23 @@ def write_to_apply(request):
                         budget_other_reason_pos = t3.Cell(10, 3)
                         budget_total_money_pos = t3.Cell(11, 2)
 
-                        budget_equip_money_pos.Range.Text = info.budget_equip_money_pos
-                        budget_equip_reason_pos.Range.Text = info.budget_equip_reason_pos
-                        budget_material_money_pos.Range.Text = info.budget_material_money_pos
-                        budget_material_reason_pos.Range.Text = info.budget_material_reason_pos
-                        budget_meeting_money_pos.Range.Text = info.budget_meeting_money_pos
-                        budget_meeting_reason_pos.Range.Text = info.budget_meeting_reason_pos
-                        budget_apply_money_pos.Range.Text = info.budget_apply_money_pos
-                        budget_apply_reason_pos.Range.Text = info.budget_apply_reason_pos
-                        budget_books_money_pos.Range.Text = info.budget_books_money_pos
-                        budget_books_reason_pos.Range.Text = info.budget_books_reason_pos
-                        budget_trans_money_pos.Range.Text = info.budget_trans_money_pos
-                        budget_trans_reason_pos.Range.Text = info.budget_trans_reason_pos
-                        budget_service_money_pos.Range.Text = info.budget_service_money_pos
-                        budget_service_reason_pos.Range.Text = info.budget_service_reason_pos
-                        budget_other_money_pos.Range.Text = info.budget_other_money_pos
-                        budget_other_reason_pos.Range.Text = info.budget_other_reason_pos
-                        budget_total_money_pos.Range.Text = info.budget_total_money_pos
+                        budget_equip_money_pos.Range.Text = info.budget_equip_money
+                        budget_equip_reason_pos.Range.Text = info.budget_equip_reason
+                        budget_material_money_pos.Range.Text = info.budget_material_money
+                        budget_material_reason_pos.Range.Text = info.budget_material_reason
+                        budget_meeting_money_pos.Range.Text = info.budget_meeting_money
+                        budget_meeting_reason_pos.Range.Text = info.budget_meeting_reason
+                        budget_apply_money_pos.Range.Text = info.budget_apply_money
+                        budget_apply_reason_pos.Range.Text = info.budget_apply_reason
+                        budget_books_money_pos.Range.Text = info.budget_books_money
+                        budget_books_reason_pos.Range.Text = info.budget_books_reason
+                        budget_trans_money_pos.Range.Text = info.budget_trans_money
+                        budget_trans_reason_pos.Range.Text = info.budget_trans_reason
+                        budget_service_money_pos.Range.Text = info.budget_service_money
+                        budget_service_reason_pos.Range.Text = info.budget_service_reason
+                        budget_other_money_pos.Range.Text = info.budget_other_money
+                        budget_other_reason_pos.Range.Text = info.budget_other_reason
+                        budget_total_money_pos.Range.Text = info.budget_total_money
 
                         doc.SaveAs(savepath)
                         doc.Close()
@@ -608,7 +623,7 @@ def write_to_conclude(request):
                         doc.Close()
                         app.Quit()
                         print('保存完毕')
-                        # date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+                        date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
                         Conclude.objects.filter(leader_id=id).update(export_time=date)
                 print(savepath.encode('utf-8'))
                 pathlist.append(savepath)

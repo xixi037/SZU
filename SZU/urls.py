@@ -30,6 +30,7 @@ urlpatterns = [
                   url(r'^admin/op_chagpwd', admin_op.change_password_op),
                   url(r'^admin/login', admin_op.login),
                   url(r'^admin/check$', admin_op.check),
+                  url(r'^admin/base/apply_infolist', admin_op.manage_apply_info),
                   url(r'^admin/base/middle_infolist', admin_op.manage_middle_info),
                   url(r'^admin/base/conclude_infolist', admin_op.manage_conclude_info),
                   url(r'^admin/base/files_infolist', admin_op.manage_files_info),

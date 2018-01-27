@@ -10,7 +10,7 @@ from django.shortcuts import render
 import time
 
 from Innovation.exportword import write_to_middle
-from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status, Conclude
+from Innovation.models import Users, Middle, Managers, ProInfo, Members, Status, Conclude, Apply
 
 
 def admin_base(request):
@@ -43,6 +43,30 @@ def admin_welcome(request):
         username = request.COOKIES.get('username')
         return render(request, 'admin/admin_welcome.html', {'username':username})
     return HttpResponseRedirect('/admin/login')
+
+def manage_apply_info(request):
+    infolist = []
+    prolist = Apply.objects.filter(status=1)
+    for i in prolist:
+        id=i.pro_id
+        records = ProInfo.objects.filter(id=id)
+        for k in records:
+            dict = model_to_dict(k)
+            leader_id = k.leader_id
+            user = Users.objects.filter(username=leader_id)
+            for j in user:
+                name = j.name
+            dict['name']=name
+            dict['export_time'] = i.export_time
+            infolist.append(dict)
+    print(infolist)
+    count = len(infolist)
+    print('列表长度：'+str(count))
+    page = int(math.ceil(count / 20))
+    pageIndex = int(request.GET.get('pageIndex', 1))
+    print(pageIndex)
+    info = infolist[(pageIndex - 1) * 20:20 * pageIndex]
+    return render(request, 'admin/infolist_apply.html', {'infolist':info, 'pageIndex':pageIndex, 'count':count, 'page':page})
 
 def manage_middle_info(request):
     infolist = []
